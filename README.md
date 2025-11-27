@@ -1,90 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+## AusData SDK
 
-## Getting Started
+`@ausdata/sdk` encapsulates AusData's email template layer. It exposes TypeScript helpers for generating consistent HTML and plaintext content and provides a demo project that mirrors production usage.
 
-### 1. Install Dependencies
+### Capabilities
+
+- Template presets: **Modern**, **Minimal**, **Corporate**, **Playful** (see `src/templates`).
+- Rendering utilities: `renderEmailHtml` / `renderEmailText` accept structured payloads and output ready-to-send markup.
+- Template metadata: `EmailTemplates.list()` enumerates the available presets for selection UIs or admin tools.
+- Reference implementation: `examples/next-app` shows how to plug the SDK into a form submission flow.
+
+### Install & Build
 
 ```bash
 npm install
+npm run build
 ```
 
-### 2. Configure API Key
+Build artifacts land in `dist/` (CJS, ESM, and `.d.ts`). Only that folder needs to be published to npm.
 
-Copy the environment file and add your AusData API key:
+### Usage
+
+```ts
+import {
+  renderEmailHtml,
+  renderEmailText,
+  EmailTemplates,
+} from '@ausdata/sdk';
+
+const html = renderEmailHtml(
+  {
+    name: 'Ada',
+    email: 'ada@example.com',
+    company: 'AusData',
+    message: 'Requesting a product demo',
+  },
+  { template: 'playful' }
+);
+
+const text = renderEmailText({
+  name: 'Ada',
+  email: 'ada@example.com',
+  message: 'Requesting a product demo',
+});
+
+console.log(EmailTemplates.list());
+```
+
+### Repository Layout
+
+```
+src/                # SDK source files
+examples/next-app   # Next.js demo consuming the SDK
+doc/                # Template and theme guidance
+```
+
+### Demo Workflow
 
 ```bash
-cp .env.local.example .env.local
-```
-
-Edit `.env.local` and replace with your actual API key:
-
-```
-NEXT_PUBLIC_API_KEY=your-api-key-here
-```
-
-### 3. Run Development Server
-
-First, run the development server:
-
-```bash
+cd examples/next-app
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Link the root SDK via `npm link` or a workspace to validate template edits inside the demo UI.
 
-## API Integration
+### Release Checklist
 
-This project integrates with the [AusData API](https://api.ausdata.app) for form submissions.
-
-### How It Works
-
-1. **Contact Form**: The homepage (`src/app/page.tsx`) displays a contact form with name, email, and message fields.
-
-2. **API Proxy**: Form submissions are sent to a Next.js API route (`src/app/api/submit-form/route.ts`) which acts as a proxy to avoid CORS issues.
-
-3. **External API**: The proxy forwards requests to `https://api.ausdata.app/api/v1/forms/submit` with proper authentication.
-
-### Architecture
-
-```
-User Form → /api/submit-form → https://api.ausdata.app/api/v1/forms/submit
+```bash
+npm run clean
+npm run build
+npm publish --access public
 ```
 
-**Why use a proxy?**
-- Avoids CORS (Cross-Origin Resource Sharing) restrictions in the browser
-- Keeps API keys secure on the server side
-- Provides better error handling and logging
-
-### API Endpoints
-
-**Local Proxy Endpoint:**
-- `POST /api/submit-form`
-- Body: `{ data: { name, email, message } }`
-
-**External API Endpoint:**
-- `POST https://api.ausdata.app/api/v1/forms/submit`
-- Headers: `Authorization: Bearer <api-key>`
-- Body: `{ formId: "contact-form", data: { name, email, message } }`
-
-For more details about the AusData API, see [README-API.md](./README-API.md).
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Before publishing, bump the version, verify a clean git state, and run lint/tests as required.
