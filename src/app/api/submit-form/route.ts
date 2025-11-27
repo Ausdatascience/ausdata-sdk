@@ -13,7 +13,9 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const response = await fetch('https://api.ausdata.app/api/v1/forms/submit', {
+    const apiUrl = process.env.AUSDATA_API_URL || 'https://api.ausdata.app';
+
+    const response = await fetch(`${apiUrl}/api/v1/forms/submit`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

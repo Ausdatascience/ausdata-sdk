@@ -1,0 +1,85 @@
+{
+  "themeToggle": {
+    "background": {
+      "light": "bg-cyan-100",
+      "dark": "dark:bg-cyan-900"
+    },
+    "border": {
+      "light": "border-cyan-300",
+      "dark": "dark:border-cyan-700"
+    },
+    "iconLight": "text-cyan-700",
+    "iconDark": "text-cyan-300"
+  },
+  "contactForm": {
+    "background": {
+      "light": "bg-cyan-50",
+      "dark": "dark:bg-cyan-950"
+    },
+    "title": {
+      "light": "text-cyan-900",
+      "dark": "dark:text-cyan-50"
+    },
+    "subtitle": {
+      "light": "text-cyan-600",
+      "dark": "dark:text-cyan-400"
+    },
+    "label": {
+      "light": "text-cyan-700",
+      "dark": "dark:text-cyan-300"
+    },
+    "labelOptional": {
+      "light": "text-cyan-400",
+      "dark": "text-cyan-400"
+    },
+    "input": {
+      "border": {
+        "light": "border-cyan-300",
+        "dark": "dark:border-cyan-700"
+      },
+      "background": {
+        "light": "bg-white",
+        "dark": "dark:bg-cyan-900"
+      },
+      "text": {
+        "light": "text-cyan-900",
+        "dark": "dark:text-cyan-100"
+      },
+      "focus": "focus:ring-cyan-500"
+    },
+    "button": {
+      "background": "bg-cyan-600",
+      "hover": "hover:bg-cyan-700",
+      "disabled": "disabled:bg-cyan-300",
+      "text": "text-white"
+    },
+    "success": {
+      "background": {
+        "light": "bg-green-50",
+        "dark": "dark:bg-green-900/20"
+      },
+      "border": {
+        "light": "border-green-200",
+        "dark": "dark:border-green-800"
+      },
+      "text": {
+        "light": "text-green-800",
+        "dark": "dark:text-green-200"
+      }
+    },
+    "error": {
+      "background": {
+        "light": "bg-red-50",
+        "dark": "dark:bg-red-900/20"
+      },
+      "border": {
+        "light": "border-red-200",
+        "dark": "dark:border-red-800"
+      },
+      "text": {
+        "light": "text-red-800",
+        "dark": "dark:text-red-200"
+      }
+    }
+  }
+}
