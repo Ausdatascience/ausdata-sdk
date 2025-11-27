@@ -2,6 +2,28 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
+### 1. Install Dependencies
+
+```bash
+npm install
+```
+
+### 2. Configure API Key
+
+Copy the environment file and add your AusData API key:
+
+```bash
+cp .env.local.example .env.local
+```
+
+Edit `.env.local` and replace with your actual API key:
+
+```
+NEXT_PUBLIC_API_KEY=your-api-key-here
+```
+
+### 3. Run Development Server
+
 First, run the development server:
 
 ```bash
@@ -16,9 +38,41 @@ bun dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## API Integration
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+This project integrates with the [AusData API](https://api.ausdata.app) for form submissions.
+
+### How It Works
+
+1. **Contact Form**: The homepage (`src/app/page.tsx`) displays a contact form with name, email, and message fields.
+
+2. **API Proxy**: Form submissions are sent to a Next.js API route (`src/app/api/submit-form/route.ts`) which acts as a proxy to avoid CORS issues.
+
+3. **External API**: The proxy forwards requests to `https://api.ausdata.app/api/v1/forms/submit` with proper authentication.
+
+### Architecture
+
+```
+User Form → /api/submit-form → https://api.ausdata.app/api/v1/forms/submit
+```
+
+**Why use a proxy?**
+- Avoids CORS (Cross-Origin Resource Sharing) restrictions in the browser
+- Keeps API keys secure on the server side
+- Provides better error handling and logging
+
+### API Endpoints
+
+**Local Proxy Endpoint:**
+- `POST /api/submit-form`
+- Body: `{ data: { name, email, message } }`
+
+**External API Endpoint:**
+- `POST https://api.ausdata.app/api/v1/forms/submit`
+- Headers: `Authorization: Bearer <api-key>`
+- Body: `{ formId: "contact-form", data: { name, email, message } }`
+
+For more details about the AusData API, see [README-API.md](./README-API.md).
 
 ## Learn More
 
