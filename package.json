@@ -7,14 +7,9 @@
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
-    "0": [
-      {
-        "import": "./dist/index.js"
-      }
-    ],
     ".": {
       "types": "./dist/index.d.ts",
-      "import": "./dist/index.mjs",
+      "import": "./dist/index.js",
       "require": "./dist/index.cjs"
     }
   },
@@ -23,7 +18,7 @@
   ],
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --out-extension .js=.mjs",
     "lint": "eslint . --ext .ts,.tsx"
   },
   "keywords": [

@@ -13,6 +13,7 @@ Official TypeScript toolkit for interacting with the AusData platform. Ship emai
 - **Rendering helpers** – `renderEmailHtml` / `renderEmailText` convert structured payloads into ready-to-send markup.
 - **Template metadata** – `EmailTemplates.list()` exposes the available presets for CMS/admin integrations.
 - **Forms API client** – `AusdataClient` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
+- **Email API client** – `AusdataClient.sendEmail` triggers server-side delivery through `/api/v1/emails/send`.
 
 ## Installation
 
@@ -33,9 +34,11 @@ AUSDATA_API_KEY=aus_sk_************************
 ## Quick Start
 
 ```ts
-import { AusdataClient, renderEmailHtml } from '@ausdata/sdk';
+import { AusdataClient, renderEmailHtml, renderEmailText } from '@ausdata/sdk';
 
-// 1. Render email content
+const client = new AusdataClient({ apiKey: process.env.AUSDATA_API_KEY! });
+
+// 1. Render email content using AusData templates
 const html = renderEmailHtml({
   name: 'Ada',
   email: 'ada@example.com',
@@ -43,17 +46,31 @@ const html = renderEmailHtml({
   message: 'Requesting a demo',
 }, { template: 'playful' });
 
+const text = renderEmailText({
+  name: 'Ada',
+  email: 'ada@example.com',
+  company: 'AusData',
+  message: 'Requesting a demo',
+});
+
 // 2. Submit form data through AusData API
-const client = new AusdataClient({ apiKey: process.env.AUSDATA_API_KEY! });
 const submission = await client.submitForm({
   formId: 'contact-form',
   data: { name: 'Ada', email: 'ada@example.com', message: 'Requesting a demo' },
 });
 
-console.log(submission.id);
+// 3. Send a notification email via the AusData Email API
+const email = await client.sendEmail({
+  to: 'hello@ausdata.org',
+  subject: `New contact: ${submission.id}`,
+  html,
+  text,
+});
+
+console.log(submission.id, email.id);
 ```
 
-`submitForm` automatically sends `Authorization: Bearer <api-key>` to `https://api.ausdata.app/api/v1/forms/submit`. Override `baseUrl` for staging or self-hosted deployments.
+Both helpers automatically send `Authorization: Bearer <api-key>` to `https://api.ausdata.app`. Override `baseUrl` for staging or self-hosted deployments.
 
 ## API Surface
 
@@ -65,6 +82,7 @@ console.log(submission.id);
 ### Client
 - `new AusdataClient({ apiKey, baseUrl? })`
 - `client.submitForm({ formId, data })`
+- `client.sendEmail({ to, subject, html?, text?, fromEmail?, fromName? })`
 - `AusdataApiError` – thrown when the API responds with non-2xx status.
 
 ## Repository Layout
