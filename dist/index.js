@@ -568,7 +568,82 @@ var EmailTemplates = {
     return Object.keys(templates);
   }
 };
+
+// src/client.ts
+import fetch from "cross-fetch";
+var AusdataApiError = class extends Error {
+  constructor(message, statusCode, details) {
+    super(message);
+    this.name = "AusdataApiError";
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+};
+var AusdataClient = class {
+  constructor(options) {
+    if (!options?.apiKey) {
+      throw new Error("AusData API key is required");
+    }
+    this.apiKey = options.apiKey;
+    this.baseUrl = (options.baseUrl ?? "https://api.ausdata.app").replace(/\/$/, "");
+    this.fetchImpl = options.fetchImpl ?? fetch;
+  }
+  async submitForm(params) {
+    if (!params?.formId) {
+      throw new Error("formId is required");
+    }
+    if (!params.data || typeof params.data !== "object") {
+      throw new Error("data must be an object");
+    }
+    return this.post("/api/v1/forms/submit", {
+      formId: params.formId,
+      data: params.data
+    });
+  }
+  async sendEmail(params) {
+    if (!params?.to) {
+      throw new Error('"to" is required');
+    }
+    if (!params.subject) {
+      throw new Error('"subject" is required');
+    }
+    if (!params.html && !params.text) {
+      throw new Error('Either "html" or "text" content must be provided');
+    }
+    return this.post("/api/v1/emails/send", {
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+      text: params.text,
+      fromEmail: params.fromEmail,
+      fromName: params.fromName
+    });
+  }
+  async post(path, body) {
+    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    let payload;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = void 0;
+    }
+    if (!response.ok) {
+      const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
+      throw new AusdataApiError(message, response.status, payload);
+    }
+    return payload;
+  }
+};
 export {
+  AusdataApiError,
+  AusdataClient,
   EmailTemplates,
   renderEmailHtml,
   renderEmailText

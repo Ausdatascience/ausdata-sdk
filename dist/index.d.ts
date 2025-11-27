@@ -1,3 +1,5 @@
+import fetch from 'cross-fetch';
+
 interface ContactFormData$4 {
     name: string;
     email: string;
@@ -79,4 +81,40 @@ declare const EmailTemplates: {
     list(): TemplateName[];
 };
 
-export { type ContactFormData, EmailTemplates, type RenderOptions, type TemplateName, renderEmailHtml, renderEmailText };
+declare class AusdataApiError extends Error {
+    readonly statusCode?: number;
+    readonly details?: unknown;
+    constructor(message: string, statusCode?: number, details?: unknown);
+}
+interface AusdataClientOptions {
+    apiKey: string;
+    baseUrl?: string;
+    fetchImpl?: typeof fetch;
+}
+interface SubmitFormParams {
+    formId: string;
+    data: Record<string, unknown>;
+}
+interface SendEmailParams {
+    to: string;
+    subject: string;
+    html?: string;
+    text?: string;
+    fromEmail?: string;
+    fromName?: string;
+}
+declare class AusdataClient {
+    private readonly apiKey;
+    private readonly baseUrl;
+    private readonly fetchImpl;
+    constructor(options: AusdataClientOptions);
+    submitForm(params: SubmitFormParams): Promise<{
+        id: string;
+    }>;
+    sendEmail(params: SendEmailParams): Promise<{
+        id: string;
+    }>;
+    private post;
+}
+
+export { AusdataApiError, AusdataClient, type AusdataClientOptions, type ContactFormData, EmailTemplates, type RenderOptions, type SendEmailParams, type SubmitFormParams, type TemplateName, renderEmailHtml, renderEmailText };

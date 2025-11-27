@@ -1,7 +1,9 @@
 "use strict";
+var __create = Object.create;
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
 var __getOwnPropNames = Object.getOwnPropertyNames;
+var __getProtoOf = Object.getPrototypeOf;
 var __hasOwnProp = Object.prototype.hasOwnProperty;
 var __export = (target, all) => {
   for (var name in all)
@@ -15,11 +17,21 @@ var __copyProps = (to, from, except, desc) => {
   }
   return to;
 };
+var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+  // If the importer is in node compatibility mode or this is not an ESM
+  // file that has been converted to a CommonJS file using a Babel-
+  // compatible transform (i.e. "__esModule" has not been set), then set
+  // "default" to the CommonJS "module.exports" for node compatibility.
+  isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+  mod
+));
 var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
 // src/index.ts
 var index_exports = {};
 __export(index_exports, {
+  AusdataApiError: () => AusdataApiError,
+  AusdataClient: () => AusdataClient,
   EmailTemplates: () => EmailTemplates,
   renderEmailHtml: () => renderEmailHtml,
   renderEmailText: () => renderEmailText
@@ -590,8 +602,83 @@ var EmailTemplates = {
     return Object.keys(templates);
   }
 };
+
+// src/client.ts
+var import_cross_fetch = __toESM(require("cross-fetch"), 1);
+var AusdataApiError = class extends Error {
+  constructor(message, statusCode, details) {
+    super(message);
+    this.name = "AusdataApiError";
+    this.statusCode = statusCode;
+    this.details = details;
+  }
+};
+var AusdataClient = class {
+  constructor(options) {
+    if (!options?.apiKey) {
+      throw new Error("AusData API key is required");
+    }
+    this.apiKey = options.apiKey;
+    this.baseUrl = (options.baseUrl ?? "https://api.ausdata.app").replace(/\/$/, "");
+    this.fetchImpl = options.fetchImpl ?? import_cross_fetch.default;
+  }
+  async submitForm(params) {
+    if (!params?.formId) {
+      throw new Error("formId is required");
+    }
+    if (!params.data || typeof params.data !== "object") {
+      throw new Error("data must be an object");
+    }
+    return this.post("/api/v1/forms/submit", {
+      formId: params.formId,
+      data: params.data
+    });
+  }
+  async sendEmail(params) {
+    if (!params?.to) {
+      throw new Error('"to" is required');
+    }
+    if (!params.subject) {
+      throw new Error('"subject" is required');
+    }
+    if (!params.html && !params.text) {
+      throw new Error('Either "html" or "text" content must be provided');
+    }
+    return this.post("/api/v1/emails/send", {
+      to: params.to,
+      subject: params.subject,
+      html: params.html,
+      text: params.text,
+      fromEmail: params.fromEmail,
+      fromName: params.fromName
+    });
+  }
+  async post(path, body) {
+    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(body)
+    });
+    let payload;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = void 0;
+    }
+    if (!response.ok) {
+      const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
+      throw new AusdataApiError(message, response.status, payload);
+    }
+    return payload;
+  }
+};
 // Annotate the CommonJS export names for ESM import in node:
 0 && (module.exports = {
+  AusdataApiError,
+  AusdataClient,
   EmailTemplates,
   renderEmailHtml,
   renderEmailText
