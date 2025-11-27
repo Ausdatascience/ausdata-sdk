@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { generateEmailHTML, generateEmailText } from '@/lib/email-template';
 
 export async function POST(request: NextRequest) {
   try {
@@ -40,29 +41,9 @@ export async function POST(request: NextRequest) {
           },
           body: JSON.stringify({
             to: 'ausdata.ai@gmail.com',
-            subject: `New Contact Form Submission from ${body.data.name}`,
-            html: `
-              <h2>New Contact Form Submission</h2>
-              <p><strong>Name:</strong> ${body.data.name}</p>
-              <p><strong>Email:</strong> ${body.data.email}</p>
-              ${body.data.phone ? `<p><strong>Phone:</strong> ${body.data.phone}</p>` : ''}
-              ${body.data.company ? `<p><strong>Company:</strong> ${body.data.company}</p>` : ''}
-              <p><strong>Message:</strong></p>
-              <p>${body.data.message.replace(/\n/g, '<br>')}</p>
-              <hr>
-              <p><small>Submitted at: ${new Date().toLocaleString()}</small></p>
-            `,
-            text: `
-New Contact Form Submission
-
-Name: ${body.data.name}
-Email: ${body.data.email}
-${body.data.phone ? `Phone: ${body.data.phone}` : ''}
-${body.data.company ? `Company: ${body.data.company}` : ''}
-Message: ${body.data.message}
-
-Submitted at: ${new Date().toLocaleString()}
-            `
+            subject: `📬 New Contact: ${body.data.name}${body.data.company ? ` from ${body.data.company}` : ''}`,
+            html: generateEmailHTML(body.data),
+            text: generateEmailText(body.data)
           })
         });
 
