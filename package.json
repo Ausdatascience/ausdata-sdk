@@ -1,10 +1,10 @@
 {
   "name": "@ausdata/sdk",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "Official AusData SDK for forms and email templates",
   "type": "module",
   "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "exports": {
     ".": {
