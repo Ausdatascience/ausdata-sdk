@@ -43,6 +43,8 @@ export async function POST(request: NextRequest) {
               <h2>New Contact Form Submission</h2>
               <p><strong>Name:</strong> ${body.data.name}</p>
               <p><strong>Email:</strong> ${body.data.email}</p>
+              ${body.data.phone ? `<p><strong>Phone:</strong> ${body.data.phone}</p>` : ''}
+              ${body.data.company ? `<p><strong>Company:</strong> ${body.data.company}</p>` : ''}
               <p><strong>Message:</strong></p>
               <p>${body.data.message.replace(/\n/g, '<br>')}</p>
               <hr>
@@ -53,6 +55,8 @@ New Contact Form Submission
 
 Name: ${body.data.name}
 Email: ${body.data.email}
+${body.data.phone ? `Phone: ${body.data.phone}` : ''}
+${body.data.company ? `Company: ${body.data.company}` : ''}
 Message: ${body.data.message}
 
 Submitted at: ${new Date().toLocaleString()}
