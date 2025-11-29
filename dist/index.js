@@ -569,111 +569,106 @@ var EmailTemplates = {
   }
 };
 
-// src/client.ts
-import fetch from "cross-fetch";
-var AusdataApiError = class _AusdataApiError extends Error {
-  constructor(message, statusCode, details) {
+// src/index.ts
+var AusdataError = class _AusdataError extends Error {
+  constructor(code, message, details) {
     super(message);
-    Object.setPrototypeOf(this, _AusdataApiError.prototype);
-    this.name = "AusdataApiError";
-    this.statusCode = statusCode;
+    this.name = "AusdataError";
+    this.code = code;
     this.details = details;
+    Object.setPrototypeOf(this, _AusdataError.prototype);
   }
 };
-var AusdataClient = class {
-  constructor(options) {
-    if (!options?.apiKey) {
-      throw new Error("AusData API key is required");
-    }
-    this.apiKey = options.apiKey;
-    this.baseUrl = (options.baseUrl ?? "https://api.ausdata.app").replace(/\/$/, "");
-    this.fetchImpl = options.fetchImpl;
-  }
-  async submitForm(params) {
-    if (!params?.formId) {
-      throw new Error("formId is required");
-    }
-    if (!params.data || typeof params.data !== "object") {
-      throw new Error("data must be an object");
-    }
-    return this.post("/api/v1/forms/submit", {
-      formId: params.formId,
-      data: params.data
-    });
-  }
-  async sendEmail(params) {
-    if (!params?.to) {
-      throw new Error('"to" is required');
-    }
-    if (!params.subject) {
-      throw new Error('"subject" is required');
-    }
-    if (!params.html && !params.text) {
-      throw new Error('Either "html" or "text" content must be provided');
-    }
-    return this.post("/api/v1/emails/send", {
-      to: params.to,
-      subject: params.subject,
-      html: params.html,
-      text: params.text,
-      fromEmail: params.fromEmail,
-      fromName: params.fromName
-    });
-  }
-  async searchBusiness(params) {
-    const query = params?.query || "";
-    const queryString = query ? `?q=${encodeURIComponent(query)}` : "";
-    return this.get(`/api/v1/business/search${queryString}`);
-  }
-  async get(path) {
-    const fetchFn = this.fetchImpl ?? (typeof window !== "undefined" ? window.fetch : fetch);
-    const response = await fetchFn(`${this.baseUrl}${path}`, {
-      method: "GET",
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json"
+var Ausdata = class {
+  constructor(apiKey, options) {
+    // Email module
+    this.email = {
+      send: async (payload) => {
+        return this.request("POST", "/emails/send", payload);
       }
-    });
-    let payload;
-    try {
-      payload = await response.json();
-    } catch {
-      payload = void 0;
+    };
+    // Forms module
+    this.forms = {
+      submit: async (payload) => {
+        return this.request("POST", "/forms/submit", payload);
+      }
+    };
+    // Business search module
+    this.business = {
+      search: async (params) => {
+        const queryParams = new URLSearchParams();
+        queryParams.set("q", params.q);
+        if (params.limit !== void 0) {
+          queryParams.set("limit", params.limit.toString());
+        }
+        if (params.offset !== void 0) {
+          queryParams.set("offset", params.offset.toString());
+        }
+        const queryString = queryParams.toString();
+        const url = `/business/search${queryString ? `?${queryString}` : ""}`;
+        return this.request("GET", url);
+      }
+    };
+    if (!apiKey) {
+      throw new Error("API key is required");
     }
-    if (!response.ok) {
-      const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
-      const error = new AusdataApiError(message, response.status, payload);
-      throw error;
-    }
-    return payload;
+    this.apiKey = apiKey;
+    this.baseUrl = (options?.baseUrl ?? "https://app.ausdata.ai/api/v1").replace(/\/$/, "");
   }
-  async post(path, body) {
-    const fetchFn = this.fetchImpl ?? (typeof window !== "undefined" ? window.fetch : fetch);
-    const response = await fetchFn(`${this.baseUrl}${path}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${this.apiKey}`,
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(body)
-    });
-    let payload;
+  // Private request method
+  async request(method, path, body) {
+    const url = `${this.baseUrl}${path}`;
+    const headers = {
+      "Authorization": `Bearer ${this.apiKey}`,
+      "Content-Type": "application/json"
+    };
+    const fetchOptions = {
+      method,
+      headers
+    };
+    if (method === "POST" && body) {
+      fetchOptions.body = JSON.stringify(body);
+    }
+    let response;
     try {
-      payload = await response.json();
-    } catch {
-      payload = void 0;
+      response = await fetch(url, fetchOptions);
+    } catch (error) {
+      throw new AusdataError(
+        "NETWORK_ERROR",
+        `Network request failed: ${error instanceof Error ? error.message : "Unknown error"}`,
+        error
+      );
     }
-    if (!response.ok) {
-      const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
-      const error = new AusdataApiError(message, response.status, payload);
-      throw error;
+    let apiResponse;
+    try {
+      apiResponse = await response.json();
+    } catch (error) {
+      throw new AusdataError(
+        "PARSE_ERROR",
+        `Failed to parse response: ${error instanceof Error ? error.message : "Unknown error"}`,
+        error
+      );
     }
-    return payload;
+    if (!response.ok || !apiResponse.success || apiResponse.error) {
+      const error = apiResponse.error || {
+        code: `HTTP_${response.status}`,
+        message: response.statusText || "Request failed"
+      };
+      throw new AusdataError(error.code, error.message, error.details);
+    }
+    if (!apiResponse.data) {
+      throw new AusdataError(
+        "INVALID_RESPONSE",
+        "Response data is missing",
+        apiResponse
+      );
+    }
+    return apiResponse.data;
   }
 };
 export {
-  AusdataApiError,
-  AusdataClient,
+  Ausdata,
+  AusdataError,
   EmailTemplates,
   renderEmailHtml,
   renderEmailText

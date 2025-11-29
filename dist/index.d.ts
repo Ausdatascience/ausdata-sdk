@@ -1,5 +1,3 @@
-import fetch from 'cross-fetch';
-
 interface ContactFormData$4 {
     name: string;
     email: string;
@@ -81,60 +79,84 @@ declare const EmailTemplates: {
     list(): TemplateName[];
 };
 
-declare class AusdataApiError extends Error {
-    readonly statusCode?: number;
-    readonly details?: unknown;
-    constructor(message: string, statusCode?: number, details?: unknown);
+/**
+ * Ausdata SDK
+ * Official TypeScript SDK for Ausdata API
+ */
+type ApiErrorCode = 'AUTH_001' | 'AUTH_002' | 'AUTH_003' | 'AUTH_004' | 'AUTH_005' | 'VAL_001' | 'VAL_002' | 'VAL_003' | 'BIZ_001' | 'BIZ_002' | 'DB_001' | 'DB_002' | 'SRV_001' | 'SRV_002' | 'RATE_LIMIT';
+interface ApiResponse<T = any> {
+    success: boolean;
+    data?: T;
+    error?: {
+        code: ApiErrorCode | string;
+        message: string;
+        details?: any;
+    };
 }
-interface AusdataClientOptions {
-    apiKey: string;
-    baseUrl?: string;
-    fetchImpl?: typeof fetch;
-}
-interface SubmitFormParams {
-    formId: string;
-    data: Record<string, unknown>;
-}
-interface SendEmailParams {
+interface SendEmailPayload {
     to: string;
     subject: string;
     html?: string;
     text?: string;
-    fromEmail?: string;
     fromName?: string;
+    fromEmail?: string;
 }
-interface Business {
-    name: string;
+interface SendEmailResponseData {
+    id: string;
+    status: string;
+    remainingCredits?: number;
+}
+interface SubmitFormPayload {
+    formId: string;
+    data: Record<string, any>;
+}
+interface SubmitFormResponseData {
+    id: string;
+    remainingCredits?: number;
+}
+interface SearchBusinessParams {
+    q: string;
+    limit?: number;
+    offset?: number;
+}
+interface BusinessEntity {
     abn: string;
+    name: string;
     state: string;
-    status: 'Active' | 'Inactive' | 'Cancelled';
+    postcode: string;
+    status: string;
+    type: string;
     industry?: string;
     address?: string;
 }
-interface SearchBusinessParams {
-    query?: string;
-}
-interface SearchBusinessResponse {
-    success: boolean;
-    data: Business[];
+interface SearchBusinessResponseData {
+    results: BusinessEntity[];
+    total: number;
     credits_deducted: number;
-    remaining_credits: number;
-    query: string | null;
+    remaining_credits?: number;
+    query?: string | null;
 }
-declare class AusdataClient {
+declare class AusdataError extends Error {
+    readonly code: ApiErrorCode | string;
+    readonly details?: unknown;
+    constructor(code: ApiErrorCode | string, message: string, details?: unknown);
+}
+declare class Ausdata {
     private readonly apiKey;
     private readonly baseUrl;
-    private readonly fetchImpl?;
-    constructor(options: AusdataClientOptions);
-    submitForm(params: SubmitFormParams): Promise<{
-        id: string;
-    }>;
-    sendEmail(params: SendEmailParams): Promise<{
-        id: string;
-    }>;
-    searchBusiness(params?: SearchBusinessParams): Promise<SearchBusinessResponse>;
-    private get;
-    private post;
+    constructor(apiKey: string, options?: {
+        baseUrl?: string;
+    });
+    readonly email: {
+        send: (payload: SendEmailPayload) => Promise<SendEmailResponseData>;
+    };
+    readonly forms: {
+        submit: (payload: SubmitFormPayload) => Promise<SubmitFormResponseData>;
+    };
+    readonly business: {
+        search: (params: SearchBusinessParams) => Promise<SearchBusinessResponseData>;
+    };
+    private request;
 }
 
-export { AusdataApiError, AusdataClient, type AusdataClientOptions, type Business, type ContactFormData, EmailTemplates, type RenderOptions, type SearchBusinessParams, type SearchBusinessResponse, type SendEmailParams, type SubmitFormParams, type TemplateName, renderEmailHtml, renderEmailText };
+export { type ApiErrorCode, type ApiResponse, Ausdata, AusdataError, type BusinessEntity, type ContactFormData, EmailTemplates, type RenderOptions, type SearchBusinessParams, type SearchBusinessResponseData, type SendEmailPayload, type SendEmailResponseData, type SubmitFormPayload, type SubmitFormResponseData, type TemplateName, renderEmailHtml, renderEmailText };

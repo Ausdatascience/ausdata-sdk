@@ -1,11 +1,11 @@
 {
   "name": "@ausdata/sdk",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Official AusData SDK for forms, emails and business search",
   "type": "module",
-  "main": "dist/index.cjs",
-  "module": "dist/index.js",
-  "types": "dist/index.d.ts",
+  "main": "./dist/index.cjs",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
@@ -16,23 +16,32 @@
   "files": [
     "dist"
   ],
+  "sideEffects": false,
+  "publishConfig": {
+    "access": "public"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "clean": "rimraf dist",
-    "build": "tsup src/index.ts --format esm,cjs --dts",
+    "build": "tsup src/index.ts --format esm,cjs --dts --clean",
     "lint": "eslint . --ext .ts,.tsx",
-    "test": "node test-script.mjs"
+    "test": "node test-script.mjs",
+    "prepublishOnly": "npm run build"
   },
   "keywords": [
     "ausdata",
     "forms",
     "email",
+    "business-search",
     "sdk"
   ],
-  "author": "AusData",
+  "author": "AusData Team",
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Ausdatascience/ausdata-sdk"
+    "url": "git+https://github.com/Ausdatascience/ausdata-sdk.git"
   },
   "devDependencies": {
     "eslint": "^9.13.0",
@@ -40,8 +49,5 @@
     "tsup": "^8.0.1",
     "typescript": "^5.6.3",
     "typescript-eslint": "^8.48.0"
-  },
-  "dependencies": {
-    "cross-fetch": "^4.1.0"
   }
 }

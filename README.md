@@ -1,6 +1,6 @@
 # AusData SDK
 
-Official TypeScript toolkit for interacting with the AusData platform. Ship email content that matches AusData’s design language and submit form data to `api.ausdata.app` through a typed client.
+Official TypeScript SDK for interacting with the AusData platform. Ship email content that matches AusData's design language and submit form data to `app.ausdata.ai` through a typed client.
 
 [![npm version](https://img.shields.io/npm/v/%40ausdata%2Fsdk.svg?label=npm)](https://www.npmjs.com/package/@ausdata/sdk)
 [![license](https://img.shields.io/badge/license-MIT-blue.svg)](#license)
@@ -12,9 +12,9 @@ Official TypeScript toolkit for interacting with the AusData platform. Ship emai
 - **Email templates** – Modern, Minimal, Corporate, and Playful layouts with HTML + plaintext output.
 - **Rendering helpers** – `renderEmailHtml` / `renderEmailText` convert structured payloads into ready-to-send markup.
 - **Template metadata** – `EmailTemplates.list()` exposes the available presets for CMS/admin integrations.
-- **Forms API client** – `AusdataClient.submitForm` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
-- **Email API client** – `AusdataClient.sendEmail` triggers server-side delivery through `/api/v1/emails/send`.
-- **Business search client** – `AusdataClient.searchBusiness` queries `/api/v1/business/search` to look up Australian business data.
+- **Forms API client** – `Ausdata.forms.submit` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
+- **Email API client** – `Ausdata.email.send` triggers server-side delivery through `/api/v1/emails/send`.
+- **Business search client** – `Ausdata.business.search` queries `/api/v1/business/search` to look up Australian business data.
 
 ## Installation
 
@@ -35,9 +35,9 @@ AUSDATA_API_KEY=aus_sk_************************
 ## Quick Start
 
 ```ts
-import { AusdataClient, renderEmailHtml, renderEmailText } from '@ausdata/sdk';
+import { Ausdata, renderEmailHtml, renderEmailText } from '@ausdata/sdk';
 
-const client = new AusdataClient({ apiKey: process.env.AUSDATA_API_KEY! });
+const client = new Ausdata(process.env.AUSDATA_API_KEY!);
 
 // 1. Render email content using AusData templates
 const html = renderEmailHtml({
@@ -55,13 +55,13 @@ const text = renderEmailText({
 });
 
 // 2. Submit form data through AusData API
-const submission = await client.submitForm({
+const submission = await client.forms.submit({
   formId: 'contact-form',
   data: { name: 'Ada', email: 'ada@example.com', message: 'Requesting a demo' },
 });
 
 // 3. Send a notification email via the AusData Email API
-const email = await client.sendEmail({
+const email = await client.email.send({
   to: 'hello@ausdata.org',
   subject: `New contact: ${submission.id}`,
   html,
@@ -70,12 +70,16 @@ const email = await client.sendEmail({
 
 console.log(submission.id, email.id);
 
-// 4. Search Australian businesses (mock data for now, ABN API ready)
-const searchResult = await client.searchBusiness({ query: 'Sydney' });
-console.log(searchResult.data);
+// 4. Search Australian businesses
+const searchResult = await client.business.search({ q: 'Sydney', limit: 10 });
+console.log(searchResult.results);
 ```
 
-Both helpers automatically send `Authorization: Bearer <api-key>` to `https://api.ausdata.app`. Override `baseUrl` for staging or self-hosted deployments.
+Both helpers automatically send `Authorization: Bearer <api-key>` to `https://app.ausdata.ai/api/v1`. Override `baseUrl` for staging or self-hosted deployments:
+
+```ts
+const client = new Ausdata(apiKey, { baseUrl: 'https://staging.ausdata.ai/api/v1' });
+```
 
 ## API Surface
 
@@ -85,11 +89,41 @@ Both helpers automatically send `Authorization: Bearer <api-key>` to `https://ap
 - `EmailTemplates.list()` – returns the available template identifiers.
 
 ### Client
-- `new AusdataClient({ apiKey, baseUrl?, fetchImpl? })`
-- `client.submitForm({ formId, data })`
-- `client.sendEmail({ to, subject, html?, text?, fromEmail?, fromName? })`
-- `client.searchBusiness({ query? })`
-- `AusdataApiError` – thrown when the API responds with non-2xx status.
+- `new Ausdata(apiKey, options?)` – Create a new SDK instance
+  - `apiKey: string` (required) – Your AusData API key
+  - `options?: { baseUrl?: string }` (optional) – Custom base URL
+- `client.email.send(payload)` – Send an email
+- `client.forms.submit(payload)` – Submit form data
+- `client.business.search(params)` – Search for businesses
+- `AusdataError` – thrown when the API responds with non-2xx status or network errors
+
+### Types
+
+All types from the API contract are exported:
+
+- `ApiErrorCode`, `ApiResponse`
+- `SendEmailPayload`, `SendEmailResponseData`
+- `SubmitFormPayload`, `SubmitFormResponseData`
+- `SearchBusinessParams`, `BusinessEntity`, `SearchBusinessResponseData`
+- `AusdataError`
+
+## Error Handling
+
+The SDK throws `AusdataError` instances when API requests fail:
+
+```ts
+import { Ausdata, AusdataError } from '@ausdata/sdk';
+
+try {
+  await client.email.send({ to: 'test@example.com', subject: 'Test', html: '<p>Test</p>' });
+} catch (error) {
+  if (error instanceof AusdataError) {
+    console.error('Error code:', error.code);
+    console.error('Error message:', error.message);
+    console.error('Error details:', error.details);
+  }
+}
+```
 
 ## Repository Layout
 
@@ -105,6 +139,7 @@ dist/         # Build artifacts (npm publish output)
 ```bash
 npm run lint   # ESLint over src/
 npm run build  # tsup -> dist/
+npm test       # Run test script
 ```
 
 ## Contributing
@@ -124,4 +159,3 @@ MIT © Ausdata Science
 
 - **Publisher:** Ausdata Science — hello@ausdata.ai
 - **Technical Support:** Ausdata Lab — hello@ausdata.org
-# ausdata-api
