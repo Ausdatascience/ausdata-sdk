@@ -103,10 +103,28 @@ interface SendEmailParams {
     fromEmail?: string;
     fromName?: string;
 }
+interface Business {
+    name: string;
+    abn: string;
+    state: string;
+    status: 'Active' | 'Inactive' | 'Cancelled';
+    industry?: string;
+    address?: string;
+}
+interface SearchBusinessParams {
+    query?: string;
+}
+interface SearchBusinessResponse {
+    success: boolean;
+    data: Business[];
+    credits_deducted: number;
+    remaining_credits: number;
+    query: string | null;
+}
 declare class AusdataClient {
     private readonly apiKey;
     private readonly baseUrl;
-    private readonly fetchImpl;
+    private readonly fetchImpl?;
     constructor(options: AusdataClientOptions);
     submitForm(params: SubmitFormParams): Promise<{
         id: string;
@@ -114,7 +132,9 @@ declare class AusdataClient {
     sendEmail(params: SendEmailParams): Promise<{
         id: string;
     }>;
+    searchBusiness(params?: SearchBusinessParams): Promise<SearchBusinessResponse>;
+    private get;
     private post;
 }
 
-export { AusdataApiError, AusdataClient, type AusdataClientOptions, type ContactFormData, EmailTemplates, type RenderOptions, type SendEmailParams, type SubmitFormParams, type TemplateName, renderEmailHtml, renderEmailText };
+export { AusdataApiError, AusdataClient, type AusdataClientOptions, type Business, type ContactFormData, EmailTemplates, type RenderOptions, type SearchBusinessParams, type SearchBusinessResponse, type SendEmailParams, type SubmitFormParams, type TemplateName, renderEmailHtml, renderEmailText };

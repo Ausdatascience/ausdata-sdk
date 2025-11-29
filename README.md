@@ -12,8 +12,9 @@ Official TypeScript toolkit for interacting with the AusData platform. Ship emai
 - **Email templates** – Modern, Minimal, Corporate, and Playful layouts with HTML + plaintext output.
 - **Rendering helpers** – `renderEmailHtml` / `renderEmailText` convert structured payloads into ready-to-send markup.
 - **Template metadata** – `EmailTemplates.list()` exposes the available presets for CMS/admin integrations.
-- **Forms API client** – `AusdataClient` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
+- **Forms API client** – `AusdataClient.submitForm` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
 - **Email API client** – `AusdataClient.sendEmail` triggers server-side delivery through `/api/v1/emails/send`.
+- **Business search client** – `AusdataClient.searchBusiness` queries `/api/v1/business/search` to look up Australian business data.
 
 ## Installation
 
@@ -68,6 +69,10 @@ const email = await client.sendEmail({
 });
 
 console.log(submission.id, email.id);
+
+// 4. Search Australian businesses (mock data for now, ABN API ready)
+const searchResult = await client.searchBusiness({ query: 'Sydney' });
+console.log(searchResult.data);
 ```
 
 Both helpers automatically send `Authorization: Bearer <api-key>` to `https://api.ausdata.app`. Override `baseUrl` for staging or self-hosted deployments.
@@ -80,9 +85,10 @@ Both helpers automatically send `Authorization: Bearer <api-key>` to `https://ap
 - `EmailTemplates.list()` – returns the available template identifiers.
 
 ### Client
-- `new AusdataClient({ apiKey, baseUrl? })`
+- `new AusdataClient({ apiKey, baseUrl?, fetchImpl? })`
 - `client.submitForm({ formId, data })`
 - `client.sendEmail({ to, subject, html?, text?, fromEmail?, fromName? })`
+- `client.searchBusiness({ query? })`
 - `AusdataApiError` – thrown when the API responds with non-2xx status.
 
 ## Repository Layout

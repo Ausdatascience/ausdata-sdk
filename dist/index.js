@@ -571,9 +571,10 @@ var EmailTemplates = {
 
 // src/client.ts
 import fetch from "cross-fetch";
-var AusdataApiError = class extends Error {
+var AusdataApiError = class _AusdataApiError extends Error {
   constructor(message, statusCode, details) {
     super(message);
+    Object.setPrototypeOf(this, _AusdataApiError.prototype);
     this.name = "AusdataApiError";
     this.statusCode = statusCode;
     this.details = details;
@@ -586,7 +587,7 @@ var AusdataClient = class {
     }
     this.apiKey = options.apiKey;
     this.baseUrl = (options.baseUrl ?? "https://api.ausdata.app").replace(/\/$/, "");
-    this.fetchImpl = options.fetchImpl ?? fetch;
+    this.fetchImpl = options.fetchImpl;
   }
   async submitForm(params) {
     if (!params?.formId) {
@@ -619,8 +620,36 @@ var AusdataClient = class {
       fromName: params.fromName
     });
   }
+  async searchBusiness(params) {
+    const query = params?.query || "";
+    const queryString = query ? `?q=${encodeURIComponent(query)}` : "";
+    return this.get(`/api/v1/business/search${queryString}`);
+  }
+  async get(path) {
+    const fetchFn = this.fetchImpl ?? (typeof window !== "undefined" ? window.fetch : fetch);
+    const response = await fetchFn(`${this.baseUrl}${path}`, {
+      method: "GET",
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        "Content-Type": "application/json"
+      }
+    });
+    let payload;
+    try {
+      payload = await response.json();
+    } catch {
+      payload = void 0;
+    }
+    if (!response.ok) {
+      const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
+      const error = new AusdataApiError(message, response.status, payload);
+      throw error;
+    }
+    return payload;
+  }
   async post(path, body) {
-    const response = await this.fetchImpl(`${this.baseUrl}${path}`, {
+    const fetchFn = this.fetchImpl ?? (typeof window !== "undefined" ? window.fetch : fetch);
+    const response = await fetchFn(`${this.baseUrl}${path}`, {
       method: "POST",
       headers: {
         Authorization: `Bearer ${this.apiKey}`,
@@ -636,7 +665,8 @@ var AusdataClient = class {
     }
     if (!response.ok) {
       const message = (payload && typeof payload === "object" && "error" in payload && typeof payload.error === "string" ? payload.error : response.statusText) || "AusData API request failed";
-      throw new AusdataApiError(message, response.status, payload);
+      const error = new AusdataApiError(message, response.status, payload);
+      throw error;
     }
     return payload;
   }

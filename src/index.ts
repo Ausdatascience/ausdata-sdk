@@ -19,4 +19,7 @@ export type {
   AusdataClientOptions,
   SubmitFormParams,
   SendEmailParams,
+  Business,
+  SearchBusinessParams,
+  SearchBusinessResponse,
 } from './client';
