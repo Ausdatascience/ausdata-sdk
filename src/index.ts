@@ -82,6 +82,14 @@ export interface BusinessEntity {
   type: string;   // 'IND' | 'CO' | 'OTHER'
   industry?: string; // Optional: industry classification
   address?: string;  // Optional: full address
+  // Extended ABR fields (available when searching by 11‑digit ABN)
+  abnStatus?: string;        // e.g. "Active"
+  gst?: string;              // e.g. "Registered (from 2000-07-01)" | "Not registered"
+  businessNames?: string[];  // Trading names / business names
+  // Name-search specific scoring/meta (mainly available for name searches).
+  score?: number;      // Match score from name search (0‑100)
+  nameType?: string;   // ABR name type code (e.g. "BN", "LN")
+  isCurrent?: string;  // Raw current indicator from ABR (e.g. "Y"/"N")
 }
 
 export interface SearchBusinessResponseData {
@@ -228,3 +236,6 @@ export type {
   TemplateName,
   RenderOptions,
 } from './templates';
+
+// Business helpers module
+export { BusinessModule } from './business';

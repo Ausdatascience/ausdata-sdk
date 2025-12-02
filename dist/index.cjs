@@ -22,6 +22,7 @@ var index_exports = {};
 __export(index_exports, {
   Ausdata: () => Ausdata,
   AusdataError: () => AusdataError,
+  BusinessModule: () => BusinessModule,
   EmailTemplates: () => EmailTemplates,
   renderEmailHtml: () => renderEmailHtml,
   renderEmailText: () => renderEmailText
@@ -593,6 +594,78 @@ var EmailTemplates = {
   }
 };
 
+// src/business.ts
+var BusinessModule = class {
+  constructor(client) {
+    this.client = client;
+  }
+  /**
+   * Utility: detect if a string looks like an ABN (11 digits after stripping spaces).
+   * This is deliberately simple and does not perform checksum validation.
+   */
+  static looksLikeAbn(query) {
+    const digits = (query ?? "").toString().replace(/\D/g, "");
+    return digits.length === 11;
+  }
+  /**
+   * Search for businesses by name or ABN.
+   *
+   * - If `q` is a free-text name, this returns a list of matching businesses.
+   * - If `q` is an 11-digit ABN (spaces allowed), this returns at most one
+   *   enriched BusinessEntity with ABR detail fields populated.
+   */
+  async search(params) {
+    const raw = await this.client.business.search(params);
+    if (Array.isArray(raw)) {
+      const results = raw;
+      return {
+        results,
+        total: results.length,
+        credits_deducted: 0,
+        remaining_credits: void 0,
+        query: params.q
+      };
+    }
+    return raw;
+  }
+  /**
+   * Convenience: search by **business name** (free text).
+   *
+   * This simply forwards to `search({ q: name, ... })` but keeps your
+   * call-sites self-documenting and hides the low-level params object.
+   */
+  async searchByName(name, options) {
+    const q = (name ?? "").toString();
+    return this.search({ q, ...options || {} });
+  }
+  /**
+   * Convenience: run a search and return only the **first** result.
+   *
+   * - For name searches, this is typically the best-ranked match.
+   * - For ABN lookups, this is the single enriched entity (if any).
+   */
+  async searchFirst(params) {
+    const { results } = await this.search(params);
+    return results[0];
+  }
+  /**
+   * Convenience helper for looking up a single business by ABN.
+   * This wraps `business.search({ q: abn })` and returns the first result
+   * (or undefined if nothing was found).
+   */
+  async lookupByAbn(abn) {
+    const clean = (abn ?? "").toString().replace(/\s/g, "");
+    const result = await this.search({ q: clean });
+    return result.results[0];
+  }
+  /**
+   * Alias for `lookupByAbn` for callers that prefer a more explicit name.
+   */
+  async searchByAbn(abn) {
+    return this.lookupByAbn(abn);
+  }
+};
+
 // src/index.ts
 var AusdataError = class _AusdataError extends Error {
   constructor(code, message, details) {
@@ -694,6 +767,7 @@ var Ausdata = class {
 0 && (module.exports = {
   Ausdata,
   AusdataError,
+  BusinessModule,
   EmailTemplates,
   renderEmailHtml,
   renderEmailText

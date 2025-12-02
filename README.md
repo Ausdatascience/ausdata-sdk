@@ -14,7 +14,7 @@ Official TypeScript SDK for interacting with the AusData platform. Ship email co
 - **Template metadata** – `EmailTemplates.list()` exposes the available presets for CMS/admin integrations.
 - **Forms API client** – `Ausdata.forms.submit` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
 - **Email API client** – `Ausdata.email.send` triggers server-side delivery through `/api/v1/emails/send`.
-- **Business search client** – `Ausdata.business.search` queries `/api/v1/business/search` to look up Australian business data.
+- **Business search client** – `Ausdata.business.search` queries `/api/v1/business/search` to look up Australian business data by **name** or **11‑digit ABN**.
 
 ## Installation
 
@@ -70,9 +70,17 @@ const email = await client.email.send({
 
 console.log(submission.id, email.id);
 
-// 4. Search Australian businesses
-const searchResult = await client.business.search({ q: 'Sydney', limit: 10 });
-console.log(searchResult.results);
+// 4. Search Australian businesses by name
+const searchByName = await client.business.search({ q: 'Sydney', limit: 10 });
+console.log(searchByName.results);
+
+// 5. Use the high-level BusinessModule for more expressive helpers
+import { BusinessModule } from '@ausdata/sdk';
+const business = new BusinessModule(client);
+
+// 5.a Look up a single business by ABN (11-digit)
+const entity = await business.lookupByAbn('60728711292');
+console.log(entity?.name, entity?.abnStatus, entity?.gst, entity?.businessNames);
 ```
 
 Both helpers automatically send `Authorization: Bearer <api-key>` to `https://app.ausdata.ai/api/v1`. Override `baseUrl` for staging or self-hosted deployments:

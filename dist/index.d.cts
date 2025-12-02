@@ -80,6 +80,58 @@ declare const EmailTemplates: {
 };
 
 /**
+ * High-level business search helpers built on top of the core Ausdata client.
+ *
+ * These helpers are thin wrappers around `client.business.search` that provide
+ * more expressive method names and common patterns for:
+ *
+ * - Free-text business name search
+ * - 11-digit ABN lookup (with enriched ABR detail fields)
+ * - Selecting the “first”/primary result
+ */
+declare class BusinessModule {
+    private readonly client;
+    constructor(client: Ausdata);
+    /**
+     * Utility: detect if a string looks like an ABN (11 digits after stripping spaces).
+     * This is deliberately simple and does not perform checksum validation.
+     */
+    static looksLikeAbn(query: string): boolean;
+    /**
+     * Search for businesses by name or ABN.
+     *
+     * - If `q` is a free-text name, this returns a list of matching businesses.
+     * - If `q` is an 11-digit ABN (spaces allowed), this returns at most one
+     *   enriched BusinessEntity with ABR detail fields populated.
+     */
+    search(params: SearchBusinessParams): Promise<SearchBusinessResponseData>;
+    /**
+     * Convenience: search by **business name** (free text).
+     *
+     * This simply forwards to `search({ q: name, ... })` but keeps your
+     * call-sites self-documenting and hides the low-level params object.
+     */
+    searchByName(name: string, options?: Omit<SearchBusinessParams, "q">): Promise<SearchBusinessResponseData>;
+    /**
+     * Convenience: run a search and return only the **first** result.
+     *
+     * - For name searches, this is typically the best-ranked match.
+     * - For ABN lookups, this is the single enriched entity (if any).
+     */
+    searchFirst(params: SearchBusinessParams): Promise<BusinessEntity | undefined>;
+    /**
+     * Convenience helper for looking up a single business by ABN.
+     * This wraps `business.search({ q: abn })` and returns the first result
+     * (or undefined if nothing was found).
+     */
+    lookupByAbn(abn: string): Promise<BusinessEntity | undefined>;
+    /**
+     * Alias for `lookupByAbn` for callers that prefer a more explicit name.
+     */
+    searchByAbn(abn: string): Promise<BusinessEntity | undefined>;
+}
+
+/**
  * Ausdata SDK
  * Official TypeScript SDK for Ausdata API
  */
@@ -128,6 +180,12 @@ interface BusinessEntity {
     type: string;
     industry?: string;
     address?: string;
+    abnStatus?: string;
+    gst?: string;
+    businessNames?: string[];
+    score?: number;
+    nameType?: string;
+    isCurrent?: string;
 }
 interface SearchBusinessResponseData {
     results: BusinessEntity[];
@@ -159,4 +217,4 @@ declare class Ausdata {
     private request;
 }
 
-export { type ApiErrorCode, type ApiResponse, Ausdata, AusdataError, type BusinessEntity, type ContactFormData, EmailTemplates, type RenderOptions, type SearchBusinessParams, type SearchBusinessResponseData, type SendEmailPayload, type SendEmailResponseData, type SubmitFormPayload, type SubmitFormResponseData, type TemplateName, renderEmailHtml, renderEmailText };
+export { type ApiErrorCode, type ApiResponse, Ausdata, AusdataError, type BusinessEntity, BusinessModule, type ContactFormData, EmailTemplates, type RenderOptions, type SearchBusinessParams, type SearchBusinessResponseData, type SendEmailPayload, type SendEmailResponseData, type SubmitFormPayload, type SubmitFormResponseData, type TemplateName, renderEmailHtml, renderEmailText };
