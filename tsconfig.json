@@ -12,7 +12,9 @@
     "sourceMap": true,
     "outDir": "dist",
     "rootDir": "src",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "types": ["node"],
+    "jsx": "react-jsx"
   },
   "include": ["src"],
   "exclude": ["dist", "examples", "node_modules"]

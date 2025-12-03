@@ -239,3 +239,12 @@ export type {
 
 // Business helpers module
 export { BusinessModule } from './business';
+
+// Server-side utilities (for API proxy routes)
+export {
+  handleProxyRequest,
+  getApiKey as getServerApiKey,
+  getBaseUrl as getServerBaseUrl,
+  type ProxyRequest,
+  type ProxyResponse,
+} from './server';

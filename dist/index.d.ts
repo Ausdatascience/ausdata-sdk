@@ -1,3 +1,5 @@
+export { ProxyRequest, ProxyResponse, getApiKey as getServerApiKey, getBaseUrl as getServerBaseUrl, handleProxyRequest } from './server.js';
+
 interface ContactFormData$4 {
     name: string;
     email: string;

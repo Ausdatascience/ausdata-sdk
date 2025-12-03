@@ -34,6 +34,20 @@ AUSDATA_API_KEY=aus_sk_************************
 
 ## Quick Start
 
+### React UI Component (Recommended - One Line!)
+
+```tsx
+import { AusdataUI } from '@ausdata/sdk/react';
+
+export default function BusinessPage() {
+  return <AusdataUI apiKey="your-api-key" />;
+}
+```
+
+That's it! See [README-REACT.md](./README-REACT.md) for more details.
+
+### SDK Usage
+
 ```ts
 import { Ausdata, renderEmailHtml, renderEmailText } from '@ausdata/sdk';
 

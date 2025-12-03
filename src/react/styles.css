@@ -1,0 +1,809 @@
+.app-root {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding: 3rem 1.5rem;
+  /* 背景颜色由 body[data-ausdata-theme] 控制，这里保持透明即可 */
+  background: transparent;
+  color: inherit;
+  box-sizing: border-box;
+}
+
+.business-search {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.business-search-header {
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.business-search-title {
+  font-size: clamp(2rem, 3vw, 2.6rem);
+  font-weight: 650;
+  letter-spacing: -0.03em;
+  margin: 0 0 0.75rem;
+  color: #f9fafb;
+}
+
+.business-search-subtitle {
+  margin: 0 auto;
+  font-size: 0.95rem;
+  color: #9ca3af;
+  max-width: 480px;
+}
+
+.business-search-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* New panel container for form and controls */
+.business-search-panel {
+  background: transparent;
+  border-radius: 0.85rem;
+  padding: 1.5rem 1.75rem;
+  border: 1px solid rgba(55, 65, 81, 0.4);
+  backdrop-filter: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+  margin: 0 auto 1rem; /* Center panel and add bottom margin */
+  max-width: 720px;
+}
+
+.business-style-controls {
+  display: flex; /* Use flex instead of inline-flex for better consistency */
+  gap: 1.5rem; /* Increase gap between controls */
+  align-items: center;
+  font-size: 0.8rem;
+  justify-content: center; /* Center controls within their container */
+  border-top: 1px solid rgba(55, 65, 81, 0.6); /* Add a separator line */
+  padding-top: 1.25rem;
+  width: 100%; /* Ensure it takes full width of the panel */
+}
+
+.business-style-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #9ca3af;
+}
+
+.business-style-controls select {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  background: #020617;
+  color: #e5e7eb;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.business-search-form {
+  /* No longer needs its own background/border/padding, handled by panel */
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.business-search-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  align-items: center; /* Center label text and input row */
+}
+
+.business-search-label span {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #9ca3af;
+}
+
+.business-search-input-row {
+  display: flex;
+  gap: 0.75rem;
+  align-items: center;
+  width: 100%;
+  max-width: 580px; /* Control max width of the search bar itself */
+}
+
+.business-search-input-wrapper {
+  position: relative;
+  flex: 1;
+  max-width: 100%; /* Remove fixed width, let the panel control it */
+}
+
+.business-search-input {
+  width: 100%;
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  background: #0b1120;
+  color: #e5e7eb;
+  padding: 0.5rem 0.75rem 0.5rem 2.4rem;
+  font-size: 0.9rem;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    background-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.business-search-input::placeholder {
+  color: #6b7280;
+}
+
+.business-search-input:focus {
+  border-color: #818cf8;
+  background: #020617;
+}
+
+.business-search-input-icon {
+  position: absolute;
+  left: 0.7rem;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.9rem;
+  height: 0.9rem;
+  pointer-events: none;
+  color: #6b7280;
+}
+
+.business-search-button {
+  /* 尽量接近原生按钮，只做轻微统一 */
+  border-radius: 0.375rem;
+  border: 1px solid #d1d5db;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  font-family: inherit;
+  background: buttonface;
+  color: inherit;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  transition:
+    background-color 0.12s ease,
+    border-color 0.12s ease,
+    color 0.12s ease,
+    opacity 0.12s ease;
+}
+
+/* 视觉主题：minimal（当前默认整体风格） */
+.business-search-tone-minimal .business-search-panel {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(55, 65, 81, 0.9);
+}
+
+.business-search-tone-minimal .business-search-button {
+  background: #111827;
+  border-color: #4b5563;
+  color: #f9fafb;
+}
+
+.business-search-tone-minimal .business-search-input {
+  background: #020617;
+  border-color: #4b5563;
+}
+
+.business-search-tone-minimal .business-search-button:hover:not(:disabled) {
+  background: #020617;
+  border-color: #6b7280;
+}
+
+.business-search-tone-minimal .business-table-wrapper {
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
+}
+
+.business-search-tone-minimal .business-card {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(55, 65, 81, 0.9);
+}
+
+/* 视觉主题：brand（稍微突出一些品牌色，但保持无阴影） */
+.business-search-tone-brand .business-search-panel {
+  background: rgba(15, 23, 42, 0.95);
+  border-color: rgba(79, 70, 229, 0.8);
+}
+
+.business-search-tone-brand .business-search-button {
+  background: #4f46e5;
+  border-color: #4f46e5;
+  color: #f9fafb;
+}
+
+.business-search-tone-brand .business-search-button:hover:not(:disabled) {
+  background: #4338ca;
+  border-color: #4338ca;
+}
+
+.business-search-tone-brand .business-table-wrapper {
+  border-color: rgba(79, 70, 229, 0.85);
+}
+
+.business-search-tone-brand .business-card {
+  background: rgba(15, 23, 42, 0.97);
+  border-color: rgba(79, 70, 229, 0.85);
+}
+
+/* 视觉主题：light（纯白，适合集成到浅色页面） */
+.business-search-tone-light .business-search-panel {
+  background: #ffffff;
+  border-color: #e5e7eb;
+  color: #111827;
+}
+
+.business-search-tone-light .business-search-title {
+  color: #111827;
+}
+
+.business-search-tone-light .business-search-subtitle {
+  color: #4b5563;
+}
+
+.business-search-tone-light .business-search-input {
+  background: #f9fafb;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+.business-search-tone-light .business-search-input::placeholder {
+  color: #9ca3af;
+}
+
+.business-search-tone-light .business-search-button {
+  background: #2563eb;
+  border-color: #2563eb;
+  color: #ffffff;
+}
+
+.business-search-tone-light .business-search-button:hover:not(:disabled) {
+  background: #1d4ed8;
+  border-color: #1d4ed8;
+}
+
+.business-search-tone-light .business-table-wrapper {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-table thead {
+  background: #f9fafb;
+}
+
+.business-search-tone-light .business-table th {
+  color: #6b7280;
+}
+
+.business-search-tone-light .business-table th,
+.business-search-tone-light .business-table td {
+  color: #111827;
+  border-bottom-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-style-controls select,
+.business-search-tone-light .business-pagination-controls select {
+  background: #ffffff;
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+.business-search-tone-light .business-pagination-buttons button {
+  border-color: #d1d5db;
+  color: #111827;
+}
+
+.business-search-tone-light .business-card {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-card-name {
+  color: #111827;
+}
+
+.business-search-tone-light .business-card-abn,
+.business-search-tone-light .business-card-meta,
+.business-search-tone-light .business-card-score {
+  color: #4b5563;
+}
+
+.business-search-tone-light .business-card-address {
+  color: #111827;
+}
+
+/* 视觉主题：dark（更纯黑的深色） */
+.business-search-tone-dark .business-search-panel {
+  background: #020617;
+  border-color: #111827;
+}
+
+.business-search-tone-dark .business-table-wrapper {
+  background: #020617;
+  border-color: #111827;
+}
+
+.business-search-tone-dark .business-search-button {
+  background: #020617;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.business-search-tone-dark .business-search-input {
+  background: #020617;
+  border-color: #4b5563;
+  color: #e5e7eb;
+}
+
+.business-search-tone-dark .business-search-button:hover:not(:disabled) {
+  background: #020617;
+  border-color: #9ca3af;
+}
+
+/* 视觉主题：eye（护眼，偏暖色） */
+.business-search-tone-eye .business-search-panel {
+  background: #f3f4e4;
+  border-color: #e5e7c8;
+  color: #374151;
+}
+
+.business-search-tone-eye .business-search-title {
+  color: #1f2933;
+}
+
+.business-search-tone-eye .business-search-subtitle {
+  color: #4b5563;
+}
+
+.business-search-tone-eye .business-search-input {
+  background: #fdfdf6;
+  border-color: #d4d7b0;
+  color: #374151;
+}
+
+.business-search-tone-eye .business-search-input::placeholder {
+  color: #9ca38f;
+}
+
+.business-search-tone-eye .business-search-button {
+  background: #374151;
+  border-color: #374151;
+  color: #f9faf3;
+}
+
+.business-search-tone-eye .business-search-button:hover:not(:disabled) {
+  background: #111827;
+  border-color: #111827;
+}
+
+.business-search-tone-eye .business-table-wrapper {
+  background: #fdfdf6;
+  border-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-table th {
+  background: #f3f4e4;
+  color: #6b7280;
+}
+
+.business-search-tone-eye .business-table th,
+.business-search-tone-eye .business-table td {
+  color: #374151;
+  border-bottom-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-style-controls select,
+.business-search-tone-eye .business-pagination-controls select {
+  background: #fdfdf6;
+  border-color: #d4d7b0;
+  color: #374151;
+}
+
+.business-search-tone-eye .business-pagination-buttons button {
+  border-color: #d4d7b0;
+  color: #374151;
+}
+
+.business-search-tone-eye .business-card {
+  background: #fdfdf6;
+  border-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-card-name {
+  color: #1f2933;
+}
+
+.business-search-tone-eye .business-card-abn,
+.business-search-tone-eye .business-card-meta,
+.business-search-tone-eye .business-card-score {
+  color: #4b5563;
+}
+
+.business-search-tone-eye .business-card-address {
+  color: #374151;
+}
+
+.business-search-button:disabled {
+  opacity: 0.7;
+  cursor: default;
+}
+
+.business-search-button span {
+  font-size: 1rem;
+}
+
+.business-search-button-dot {
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 999px;
+  background-color: #bbf7d0;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.2);
+}
+
+.business-search-meta {
+  display: flex;
+  justify-content: center; /* Center the meta info */
+  align-items: center;
+  font-size: 0.8rem;
+  color: #9ca3af;
+  gap: 0.75rem;
+  margin-bottom: 1.5rem; /* Add some space below */
+}
+
+.business-search-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.business-search-meta-pill {
+  padding: 0.25rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(55, 65, 81, 0.8);
+  color: #e5e7eb;
+  font-size: 0.75rem;
+}
+
+.business-search-status {
+  margin-bottom: 1rem;
+  font-size: 0.85rem;
+}
+
+.business-search-status span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #9ca3af;
+}
+
+.business-search-status-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: #22c55e;
+}
+
+.business-search-error {
+  margin-bottom: 1rem;
+  padding: 0.8rem 1rem;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(248, 113, 113, 0.6);
+  background: rgba(127, 29, 29, 0.85);
+  color: #fee2e2;
+  font-size: 0.85rem;
+}
+
+.business-search-empty {
+  margin-top: 1rem;
+  padding: 1.5rem 1.25rem;
+  border-radius: 1.2rem;
+  border: 1px dashed rgba(75, 85, 99, 0.85);
+  background: rgba(15, 23, 42, 0.85);
+  color: #9ca3af;
+  font-size: 0.9rem;
+}
+
+.business-search-empty strong {
+  color: #e5e7eb;
+}
+
+.business-search-results {
+  margin-top: 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.business-search-results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+}
+
+.business-pagination-controls {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 0.8rem;
+}
+
+.business-pagination-controls label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  color: #9ca3af;
+}
+
+.business-pagination-controls select {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  background: #020617;
+  color: #e5e7eb;
+  padding: 0.15rem 0.55rem;
+  font-size: 0.8rem;
+  outline: none;
+}
+
+.business-pagination-page {
+  color: #9ca3af;
+}
+
+.business-pagination-page strong {
+  color: #e5e7eb;
+}
+
+.business-pagination-buttons {
+  display: inline-flex;
+  gap: 0.35rem;
+}
+
+.business-pagination-buttons button {
+  border-radius: 999px;
+  border: 1px solid rgba(148, 163, 184, 0.9);
+  background: transparent;
+  color: #e5e7eb;
+  padding: 0.2rem 0.7rem;
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease,
+    opacity 0.15s ease;
+}
+
+.business-pagination-buttons button:hover:not(:disabled) {
+  background: rgba(31, 41, 55, 0.9);
+  border-color: rgba(156, 163, 175, 0.9);
+}
+
+.business-pagination-buttons button:disabled {
+  opacity: 0.5;
+  cursor: default;
+}
+
+.business-badge {
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.7rem;
+  border: 1px solid rgba(75, 85, 99, 0.9);
+  color: #e5e7eb;
+}
+
+.business-badge.status-active {
+  border-color: rgba(34, 197, 94, 0.9);
+  color: #bbf7d0;
+  background: rgba(22, 101, 52, 0.7);
+}
+
+.business-badge.status-cancelled,
+.business-badge.status-inactive {
+  border-color: rgba(248, 113, 113, 0.9);
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.8);
+}
+
+/* 在表格中，Status 使用普通文本样式，不使用胶囊徽章 */
+.business-table .business-badge {
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  font-size: 0.85rem;
+  color: inherit;
+}
+
+.business-card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 0.9rem;
+}
+
+.business-card {
+  border-radius: 1rem;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  background: rgba(15, 23, 42, 0.95);
+  padding: 0.9rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.business-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.business-card-name {
+  font-weight: 600;
+  color: #f9fafb;
+  font-size: 0.95rem;
+}
+
+.business-card-abn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.business-card-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  justify-content: flex-end;
+}
+
+.business-card-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+.business-card-meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.business-card-meta-label {
+  color: #6b7280;
+}
+
+.business-card-address {
+  font-size: 0.8rem;
+  color: #e5e7eb;
+}
+
+.business-card-score {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.business-table-wrapper {
+  border-radius: 1rem;
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
+  overflow: auto;
+}
+
+.business-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 720px;
+}
+
+.business-table thead {
+  background: rgba(15, 23, 42, 0.95);
+}
+
+.business-table th,
+.business-table td {
+  padding: 0.7rem 0.9rem;
+  font-size: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid rgba(31, 41, 55, 0.9);
+  color: #e5e7eb;
+}
+
+.business-table th {
+  font-weight: 600;
+  color: #9ca3af;
+  white-space: nowrap;
+}
+
+.business-table tbody tr:last-of-type td {
+  border-bottom: none;
+}
+
+.business-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.business-table-name {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.business-table-name-main {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #f9fafb;
+}
+
+/* 在浅色主题下，名称使用深色文字，避免白底白字 */
+.business-search-tone-light .business-table-name-main,
+.business-search-tone-eye .business-table-name-main {
+  color: #111827;
+}
+
+.business-table-name-sub {
+  font-size: 0.75rem;
+  color: #9ca3af;
+}
+
+.business-table-abn {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+    'Courier New', monospace;
+  font-size: 0.8rem;
+  color: #9ca3af;
+}
+
+/* 在表格中，ABN 使用普通文字样式，避免过度"代码风格" */
+.business-table .business-table-abn {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: inherit;
+}
+
+@media (max-width: 768px) {
+  .app-root {
+    padding: 2.25rem 1rem;
+    align-items: stretch;
+  }
+
+  .business-search-form {
+    padding: 0;
+  }
+
+  .business-search-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .business-search-button {
+    justify-content: center;
+    width: 100%;
+  }
+
+  .business-search-results {
+    gap: 0.75rem;
+  }
+
+  .business-pagination-controls {
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+
+  .business-table {
+    min-width: 640px;
+  }
+}
+
