@@ -21,12 +21,24 @@
       "types": "./dist/react.d.ts",
       "import": "./dist/react.js",
       "require": "./dist/react.cjs"
-    }
+    },
+    "./styles": {
+      "default": "./dist/styles.css"
+    },
+    "./package.json": "./package.json"
+  },
+  "bin": {
+    "ausdata-sdk": "./scripts/cli.js"
   },
   "files": [
-    "dist"
+    "dist",
+    "scripts",
+    "README.md",
+    "LICENSE"
   ],
-  "sideEffects": false,
+  "sideEffects": [
+    "./dist/styles.css"
+  ],
   "publishConfig": {
     "access": "public"
   },
@@ -38,7 +50,8 @@
     "build": "tsup",
     "lint": "eslint . --ext .ts,.tsx",
     "test": "node test-script.mjs",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "generate-api-route": "node scripts/generate-api-route.js"
   },
   "keywords": [
     "ausdata",

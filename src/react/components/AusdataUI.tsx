@@ -30,6 +30,7 @@ const THEMES = [
 const VARIANTS = [
   { value: 'table', label: 'Table' },
   { value: 'card', label: 'Card' },
+  { value: 'list', label: 'List' },
 ] as const;
 
 type Theme = (typeof THEMES)[number];
@@ -42,7 +43,7 @@ export interface AusdataUIProps {
   baseUrl?: string;
   /** Default theme (default: 'minimal') */
   defaultTheme?: Theme;
-  /** Default variant: 'table' or 'card' (default: 'table') */
+  /** Default variant: 'table', 'card', or 'list' (default: 'table') */
   defaultVariant?: Variant;
   /** Compact mode (default: false) */
   dense?: boolean;
@@ -81,12 +82,67 @@ function AusdataUIContent({
   // Get API key from prop or environment
   const apiKey = useMemo(() => {
     if (propApiKey) return propApiKey;
-    // Try to get from environment
+    
+    // Next.js: process.env.NEXT_PUBLIC_* is replaced at build time in the consuming app
+    // We need to access it directly - Next.js will inline the value at build time
+    // Since this is a library, we need to check multiple ways
+    
+    // Method 1: Direct access (works when Next.js inlines the value)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    if (typeof (globalThis as any).process !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const processEnv = (globalThis as any).process.env;
+      if (processEnv?.NEXT_PUBLIC_AUSDATA_API_KEY) {
+        return processEnv.NEXT_PUBLIC_AUSDATA_API_KEY;
+      }
+    }
+    
+    // Method 2: Try direct process.env access (Next.js will inline this at build time)
+    // This works when the consuming app builds, Next.js replaces process.env.NEXT_PUBLIC_*
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const directEnv = (globalThis as any).process?.env;
+    if (directEnv?.NEXT_PUBLIC_AUSDATA_API_KEY) {
+      return directEnv.NEXT_PUBLIC_AUSDATA_API_KEY;
+    }
+    
+    // Method 3: Try window.__NEXT_DATA__ (Next.js runtime)
+    if (typeof window !== 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const nextData = (window as any).__NEXT_DATA__;
+      if (nextData?.env?.NEXT_PUBLIC_AUSDATA_API_KEY) {
+        return nextData.env.NEXT_PUBLIC_AUSDATA_API_KEY;
+      }
+    }
+    
+    // Method 4: Vite: import.meta.env
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const viteEnv = (globalThis as any).import?.meta?.env;
+      if (viteEnv?.VITE_AUSDATA_API_KEY) {
+        return viteEnv.VITE_AUSDATA_API_KEY;
+      }
+    } catch {
+      // import.meta not available
+    }
+    
+    // Method 5: Fallback: try window globals (for custom setups or runtime injection)
     if (typeof window !== 'undefined') {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const env = (window as any).__ENV__ || (globalThis as any).process?.env;
-      return env?.NEXT_PUBLIC_AUSDATA_API_KEY || env?.VITE_AUSDATA_API_KEY;
+      if (env) {
+        return env.NEXT_PUBLIC_AUSDATA_API_KEY || env.VITE_AUSDATA_API_KEY;
+      }
     }
+    
+    // Method 6: Server-side: read from process.env
+    if (typeof window === 'undefined') {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const processEnv = (globalThis as any).process?.env;
+      if (processEnv) {
+        return processEnv.AUSDATA_API_KEY || processEnv.NEXT_PUBLIC_AUSDATA_API_KEY;
+      }
+    }
+    
     return undefined;
   }, [propApiKey]);
 
@@ -101,9 +157,15 @@ function AusdataUIContent({
     return '/api';
   }, [propBaseUrl]);
 
-  // Inject styles dynamically (no-op in dev if CSS is imported manually)
+  // Inject styles dynamically (works in both dev and prod)
   useEffect(() => {
-    injectStyles();
+    // Use async injection to handle both development and production
+    injectStyles().catch((error) => {
+      // Silently fail - user can import styles manually if needed
+      if (process.env.NODE_ENV === 'development') {
+        console.warn('[@ausdata/sdk] Style injection failed. You can import styles manually: import "@ausdata/sdk/styles"', error);
+      }
+    });
   }, []);
 
   // Sync theme to body
@@ -275,23 +337,14 @@ function AusdataUIContent({
         </div>
 
         {/* Meta Line */}
-        <div className="business-search-meta">
-          <span>
-            <span className="business-search-meta-pill">Live Ausdata API</span>
-            {total > 0 && (
-              <>
-                <span>•</span>
-                <span>
-                  Showing <strong>{results.length}</strong> of{' '}
-                  <strong>{total || results.length}</strong> matches
-                </span>
-              </>
-            )}
-          </span>
-          <span>
-            <span className="business-badge">ABN lookup supported</span>
-          </span>
-        </div>
+        {total > 0 && (
+          <div className="business-search-meta">
+            <span>
+              Showing <strong>{results.length}</strong> of{' '}
+              <strong>{total || results.length}</strong> matches
+            </span>
+          </div>
+        )}
 
         {/* Error Message */}
         {error && <div className="business-search-error">{error}</div>}
@@ -353,7 +406,7 @@ function AusdataUIContent({
               </div>
             </div>
 
-            {/* Results Table/Card View */}
+            {/* Results Table/Card/List View */}
             {variant === 'table' ? (
               <div className="business-table-wrapper">
                 <table className="business-table">
@@ -410,7 +463,7 @@ function AusdataUIContent({
                   </tbody>
                 </table>
               </div>
-            ) : (
+            ) : variant === 'card' ? (
               <div className="business-card-grid">
                 {results.map((biz, index) => {
                   const statusKey = (biz.status || '').toLowerCase();
@@ -472,6 +525,57 @@ function AusdataUIContent({
                         </div>
                       )}
                     </article>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="business-list">
+                {results.map((biz, index) => {
+                  const statusKey = (biz.status || '').toLowerCase();
+                  const statusClass =
+                    statusKey === 'active'
+                      ? 'status-active'
+                      : statusKey === 'cancelled' || statusKey === 'inactive'
+                      ? 'status-cancelled'
+                      : '';
+
+                  return (
+                    <div key={`${biz.abn}-${index}`} className="business-list-item">
+                      <div className="business-list-main">
+                        <div className="business-list-name-row">
+                          <div className="business-list-name">{biz.name}</div>
+                          <div className="business-list-badges">
+                            <span className={`business-badge ${statusClass}`}>
+                              {biz.status || 'Unknown'}
+                            </span>
+                            {biz.type && (
+                              <span className="business-badge">
+                                {biz.type === 'IND'
+                                  ? 'Individual'
+                                  : biz.type === 'CO'
+                                  ? 'Company'
+                                  : biz.type}
+                              </span>
+                            )}
+                          </div>
+                        </div>
+                        <div className="business-list-details">
+                          <span className="business-list-abn">ABN {biz.abn}</span>
+                          {biz.industry && (
+                            <>
+                              <span className="business-list-separator">•</span>
+                              <span className="business-list-industry">{biz.industry}</span>
+                            </>
+                          )}
+                          <span className="business-list-separator">•</span>
+                          <span className="business-list-location">
+                            {biz.address
+                              ? biz.address
+                              : `${biz.state ?? ''} ${biz.postcode ?? ''}`.trim()}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
                   );
                 })}
               </div>

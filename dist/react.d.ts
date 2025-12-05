@@ -22,6 +22,9 @@ declare const VARIANTS: readonly [{
 }, {
     readonly value: "card";
     readonly label: "Card";
+}, {
+    readonly value: "list";
+    readonly label: "List";
 }];
 type Theme = (typeof THEMES)[number];
 type Variant = (typeof VARIANTS)[number]['value'];
@@ -32,7 +35,7 @@ interface AusdataUIProps {
     baseUrl?: string;
     /** Default theme (default: 'minimal') */
     defaultTheme?: Theme;
-    /** Default variant: 'table' or 'card' (default: 'table') */
+    /** Default variant: 'table', 'card', or 'list' (default: 'table') */
     defaultVariant?: Variant;
     /** Compact mode (default: false) */
     dense?: boolean;
