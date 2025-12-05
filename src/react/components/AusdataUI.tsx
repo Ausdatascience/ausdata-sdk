@@ -78,6 +78,8 @@ function AusdataUIContent({
   const [pageSize, setPageSize] = useState(10);
   const [currentTheme, setCurrentTheme] = useState<Theme>(defaultTheme);
   const [variant, setVariant] = useState<Variant>(defaultVariant);
+  const [selectedBusiness, setSelectedBusiness] = useState<BusinessEntity | null>(null);
+  const [showDetailModal, setShowDetailModal] = useState(false);
 
   // Get API key from prop or environment
   const apiKey = useMemo(() => {
@@ -259,6 +261,29 @@ function AusdataUIContent({
     await performSearch(trimmed, 1, newSize);
   }, [query, performSearch]);
 
+  const handleBusinessClick = useCallback((business: BusinessEntity) => {
+    setSelectedBusiness(business);
+    setShowDetailModal(true);
+  }, []);
+
+  const handleCloseModal = useCallback(() => {
+    setShowDetailModal(false);
+    setSelectedBusiness(null);
+  }, []);
+
+  // Close modal on Escape key
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape' && showDetailModal) {
+        handleCloseModal();
+      }
+    };
+    if (typeof window !== 'undefined') {
+      window.addEventListener('keydown', handleEscape);
+      return () => window.removeEventListener('keydown', handleEscape);
+    }
+  }, [showDetailModal, handleCloseModal]);
+
   const themeClass = `business-search-tone-${currentTheme}`;
 
   return (
@@ -433,7 +458,20 @@ function AusdataUIContent({
                         <tr key={`${biz.abn}-${index}`}>
                           <td>
                             <div className="business-table-name">
-                              <span className="business-table-name-main">{biz.name}</span>
+                              <span 
+                                className="business-table-name-main business-clickable"
+                                onClick={() => handleBusinessClick(biz)}
+                                role="button"
+                                tabIndex={0}
+                                onKeyDown={(e) => {
+                                  if (e.key === 'Enter' || e.key === ' ') {
+                                    e.preventDefault();
+                                    handleBusinessClick(biz);
+                                  }
+                                }}
+                              >
+                                {biz.name}
+                              </span>
                               {biz.industry && (
                                 <span className="business-table-name-sub">{biz.industry}</span>
                               )}
@@ -478,7 +516,20 @@ function AusdataUIContent({
                     <article key={`${biz.abn}-${index}`} className="business-card">
                       <div className="business-card-header">
                         <div>
-                          <div className="business-card-name">{biz.name}</div>
+                          <div 
+                            className="business-card-name business-clickable"
+                            onClick={() => handleBusinessClick(biz)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleBusinessClick(biz);
+                              }
+                            }}
+                          >
+                            {biz.name}
+                          </div>
                           <div className="business-card-abn">ABN {biz.abn}</div>
                         </div>
                         <div className="business-card-badges">
@@ -543,7 +594,20 @@ function AusdataUIContent({
                     <div key={`${biz.abn}-${index}`} className="business-list-item">
                       <div className="business-list-main">
                         <div className="business-list-name-row">
-                          <div className="business-list-name">{biz.name}</div>
+                          <div 
+                            className="business-list-name business-clickable"
+                            onClick={() => handleBusinessClick(biz)}
+                            role="button"
+                            tabIndex={0}
+                            onKeyDown={(e) => {
+                              if (e.key === 'Enter' || e.key === ' ') {
+                                e.preventDefault();
+                                handleBusinessClick(biz);
+                              }
+                            }}
+                          >
+                            {biz.name}
+                          </div>
                           <div className="business-list-badges">
                             <span className={`business-badge ${statusClass}`}>
                               {biz.status || 'Unknown'}
@@ -581,6 +645,123 @@ function AusdataUIContent({
               </div>
             )}
           </section>
+        )}
+
+        {/* Business Detail Modal */}
+        {showDetailModal && selectedBusiness && (
+          <div 
+            className="business-detail-modal-overlay"
+            onClick={handleCloseModal}
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="business-detail-title"
+          >
+            <div 
+              className="business-detail-modal"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="business-detail-modal-header">
+                <h2 id="business-detail-title">{selectedBusiness.name}</h2>
+                <button
+                  className="business-detail-modal-close"
+                  onClick={handleCloseModal}
+                  aria-label="Close"
+                >
+                  ×
+                </button>
+              </div>
+              
+              <div className="business-detail-modal-content">
+                <div className="business-detail-section">
+                  <h3>Basic Information</h3>
+                  <div className="business-detail-grid">
+                    <div className="business-detail-item">
+                      <span className="business-detail-label">ABN</span>
+                      <span className="business-detail-value">{selectedBusiness.abn}</span>
+                    </div>
+                    <div className="business-detail-item">
+                      <span className="business-detail-label">Status</span>
+                      <span className={`business-badge ${(selectedBusiness.status || '').toLowerCase() === 'active' ? 'status-active' : ''}`}>
+                        {selectedBusiness.status || 'Unknown'}
+                      </span>
+                    </div>
+                    <div className="business-detail-item">
+                      <span className="business-detail-label">Type</span>
+                      <span className="business-detail-value">
+                        {selectedBusiness.type === 'IND'
+                          ? 'Individual'
+                          : selectedBusiness.type === 'CO'
+                          ? 'Company'
+                          : selectedBusiness.type || '—'}
+                      </span>
+                    </div>
+                    {selectedBusiness.industry && (
+                      <div className="business-detail-item">
+                        <span className="business-detail-label">Industry</span>
+                        <span className="business-detail-value">{selectedBusiness.industry}</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                <div className="business-detail-section">
+                  <h3>Location</h3>
+                  <div className="business-detail-grid">
+                    {selectedBusiness.address && (
+                      <div className="business-detail-item business-detail-item-full">
+                        <span className="business-detail-label">Address</span>
+                        <span className="business-detail-value">{selectedBusiness.address}</span>
+                      </div>
+                    )}
+                    <div className="business-detail-item">
+                      <span className="business-detail-label">State</span>
+                      <span className="business-detail-value">{selectedBusiness.state || '—'}</span>
+                    </div>
+                    <div className="business-detail-item">
+                      <span className="business-detail-label">Postcode</span>
+                      <span className="business-detail-value">{selectedBusiness.postcode || '—'}</span>
+                    </div>
+                  </div>
+                </div>
+
+                {(selectedBusiness.gst || selectedBusiness.businessNames || selectedBusiness.score !== undefined) && (
+                  <div className="business-detail-section">
+                    <h3>Additional Information</h3>
+                    <div className="business-detail-grid">
+                      {selectedBusiness.gst && (
+                        <div className="business-detail-item business-detail-item-full">
+                          <span className="business-detail-label">GST</span>
+                          <span className="business-detail-value">{selectedBusiness.gst}</span>
+                        </div>
+                      )}
+                      {selectedBusiness.businessNames && selectedBusiness.businessNames.length > 0 && (
+                        <div className="business-detail-item business-detail-item-full">
+                          <span className="business-detail-label">Trading Names</span>
+                          <div className="business-detail-value">
+                            {selectedBusiness.businessNames.map((name, idx) => (
+                              <span key={idx} className="business-detail-badge">{name}</span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      {selectedBusiness.score !== undefined && (
+                        <div className="business-detail-item">
+                          <span className="business-detail-label">Match Score</span>
+                          <span className="business-detail-value">{selectedBusiness.score}</span>
+                        </div>
+                      )}
+                      {selectedBusiness.abnStatus && (
+                        <div className="business-detail-item">
+                          <span className="business-detail-label">ABN Status</span>
+                          <span className="business-detail-value">{selectedBusiness.abnStatus}</span>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
         )}
       </div>
     </div>

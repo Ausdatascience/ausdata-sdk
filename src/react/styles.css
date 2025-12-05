@@ -233,6 +233,20 @@
   border-color: rgba(55, 65, 81, 0.9);
 }
 
+.business-search-tone-minimal .business-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.business-search-tone-minimal .business-card:hover {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(75, 85, 99, 0.95);
+}
+
+.business-search-tone-minimal .business-list-item:hover {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(75, 85, 99, 0.95);
+}
+
 /* 视觉主题：brand（稍微突出一些品牌色，但保持无阴影） */
 .business-search-tone-brand .business-search-panel {
   background: rgba(15, 23, 42, 0.95);
@@ -262,6 +276,20 @@
 .business-search-tone-brand .business-list-item {
   background: rgba(15, 23, 42, 0.97);
   border-color: rgba(79, 70, 229, 0.85);
+}
+
+.business-search-tone-brand .business-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.business-search-tone-brand .business-card:hover {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(79, 70, 229, 0.95);
+}
+
+.business-search-tone-brand .business-list-item:hover {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(79, 70, 229, 0.95);
 }
 
 /* 视觉主题：light（纯白，适合集成到浅色页面） */
@@ -339,6 +367,18 @@
   border-color: #2563eb;
 }
 
+.business-search-tone-light .business-pagination-controls select:hover {
+  background-color: #f9fafb;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #9ca3af;
+}
+
+.business-search-tone-light .business-pagination-controls select:focus {
+  background-color: #f9fafb;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #2563eb;
+}
+
 .business-search-tone-light .business-pagination-buttons button {
   border-color: #d1d5db;
   color: #111827;
@@ -377,6 +417,15 @@
   border-color: #d1d5db;
 }
 
+.business-search-tone-light .business-table tbody tr:hover {
+  background: #f9fafb;
+}
+
+.business-search-tone-light .business-card:hover {
+  background: #f9fafb;
+  border-color: #d1d5db;
+}
+
 /* 视觉主题：dark（更纯黑的深色） */
 .business-search-tone-dark .business-search-panel {
   background: #020617;
@@ -403,6 +452,30 @@
 .business-search-tone-dark .business-search-button:hover:not(:disabled) {
   background: #020617;
   border-color: #9ca3af;
+}
+
+.business-search-tone-dark .business-table tbody tr:hover {
+  background: rgba(15, 23, 42, 0.9);
+}
+
+.business-search-tone-dark .business-card {
+  background: #020617;
+  border-color: #111827;
+}
+
+.business-search-tone-dark .business-card:hover {
+  background: rgba(15, 23, 42, 0.9);
+  border-color: rgba(75, 85, 99, 0.95);
+}
+
+.business-search-tone-dark .business-list-item {
+  background: #020617;
+  border-color: #111827;
+}
+
+.business-search-tone-dark .business-list-item:hover {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(75, 85, 99, 0.95);
 }
 
 /* 视觉主题：eye（护眼，偏暖色） */
@@ -477,6 +550,18 @@
   border-color: #374151;
 }
 
+.business-search-tone-eye .business-pagination-controls select:hover {
+  background-color: #f3f4e4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #9ca38f;
+}
+
+.business-search-tone-eye .business-pagination-controls select:focus {
+  background-color: #f3f4e4;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%236b7280' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #374151;
+}
+
 .business-search-tone-eye .business-pagination-buttons button {
   border-color: #d4d7b0;
   color: #374151;
@@ -511,6 +596,15 @@
 }
 
 .business-search-tone-eye .business-list-item:hover {
+  background: #f3f4e4;
+  border-color: #d4d7b0;
+}
+
+.business-search-tone-eye .business-table tbody tr:hover {
+  background: #f3f4e4;
+}
+
+.business-search-tone-eye .business-card:hover {
   background: #f3f4e4;
   border-color: #d4d7b0;
 }
@@ -631,13 +725,34 @@
 }
 
 .business-pagination-controls select {
-  border-radius: 999px;
+  border-radius: 5px;
   border: 1px solid rgba(148, 163, 184, 0.9);
-  background: #020617;
+  background-color: #020617;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 0.35rem center;
+  background-size: 0.75rem;
   color: #e5e7eb;
-  padding: 0.15rem 0.55rem;
+  padding: 0.15rem 1.5rem 0.15rem 0.55rem;
   font-size: 0.8rem;
   outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.business-pagination-controls select:hover {
+  border-color: rgba(148, 163, 184, 1);
+  background-color: rgba(15, 23, 42, 0.95);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+}
+
+.business-pagination-controls select:focus {
+  border-color: rgba(79, 70, 229, 0.8);
+  background-color: rgba(15, 23, 42, 0.95);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%239ca3af' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
 }
 
 .business-pagination-page {
@@ -654,7 +769,7 @@
 }
 
 .business-pagination-buttons button {
-  border-radius: 999px;
+  border-radius: 5px;
   border: 1px solid rgba(148, 163, 184, 0.9);
   background: transparent;
   color: #e5e7eb;
@@ -722,6 +837,13 @@
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
+  transition: background 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+}
+
+.business-card:hover {
+  background: rgba(15, 23, 42, 0.98);
+  border-color: rgba(75, 85, 99, 0.95);
 }
 
 .business-card-header {
@@ -857,7 +979,7 @@
 }
 
 .business-table-wrapper {
-  border-radius: 1rem;
+  border-radius: 5px;
   border: 1px solid rgba(55, 65, 81, 0.9);
   background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
   overflow: auto;
@@ -964,6 +1086,296 @@
 
   .business-table {
     min-width: 640px;
+  }
+}
+
+/* Clickable business name styles */
+.business-clickable {
+  cursor: pointer;
+  transition: color 0.2s ease, opacity 0.2s ease;
+  text-decoration: none;
+}
+
+.business-clickable:hover {
+  color: #60a5fa;
+  opacity: 0.9;
+}
+
+.business-clickable:focus {
+  outline: 2px solid #60a5fa;
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+.business-search-tone-light .business-clickable:hover {
+  color: #2563eb;
+}
+
+.business-search-tone-eye .business-clickable:hover {
+  color: #374151;
+}
+
+/* Business Detail Modal */
+.business-detail-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.75);
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+  padding: 1rem;
+  animation: fadeIn 0.2s ease;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.business-detail-modal {
+  background: rgba(15, 23, 42, 0.98);
+  border: 1px solid rgba(55, 65, 81, 0.9);
+  border-radius: 1rem;
+  max-width: 600px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 10px 10px -5px rgba(0, 0, 0, 0.2);
+  animation: slideUp 0.3s ease;
+  position: relative;
+}
+
+@keyframes slideUp {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+.business-detail-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.9);
+  position: sticky;
+  top: 0;
+  background: rgba(15, 23, 42, 0.98);
+  z-index: 1;
+}
+
+.business-detail-modal-header h2 {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #f9fafb;
+  flex: 1;
+  padding-right: 1rem;
+}
+
+.business-detail-modal-close {
+  background: transparent;
+  border: none;
+  color: #9ca3af;
+  font-size: 2rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  width: 2rem;
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 0.25rem;
+  transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.business-detail-modal-close:hover {
+  color: #f9fafb;
+  background-color: rgba(55, 65, 81, 0.5);
+}
+
+.business-detail-modal-content {
+  padding: 1.5rem;
+}
+
+.business-detail-section {
+  margin-bottom: 2rem;
+}
+
+.business-detail-section:last-child {
+  margin-bottom: 0;
+}
+
+.business-detail-section h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+  padding-bottom: 0.5rem;
+}
+
+.business-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.business-detail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.business-detail-item-full {
+  grid-column: 1 / -1;
+}
+
+.business-detail-label {
+  font-size: 0.75rem;
+  color: #9ca3af;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-weight: 500;
+}
+
+.business-detail-value {
+  font-size: 0.95rem;
+  color: #f9fafb;
+  word-break: break-word;
+}
+
+.business-detail-badge {
+  display: inline-block;
+  padding: 0.25rem 0.5rem;
+  background: rgba(55, 65, 81, 0.5);
+  border-radius: 0.25rem;
+  font-size: 0.85rem;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #e5e7eb;
+}
+
+/* Light theme modal styles */
+.business-search-tone-light .business-detail-modal {
+  background: #ffffff;
+  border-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-detail-modal-header {
+  background: #ffffff;
+  border-bottom-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-detail-modal-header h2 {
+  color: #111827;
+}
+
+.business-search-tone-light .business-detail-modal-close {
+  color: #6b7280;
+}
+
+.business-search-tone-light .business-detail-modal-close:hover {
+  color: #111827;
+  background-color: #f3f4f6;
+}
+
+.business-search-tone-light .business-detail-section h3 {
+  color: #374151;
+  border-bottom-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-detail-label {
+  color: #6b7280;
+}
+
+.business-search-tone-light .business-detail-value {
+  color: #111827;
+}
+
+.business-search-tone-light .business-detail-badge {
+  background: #f3f4f6;
+  color: #374151;
+}
+
+/* Eye theme modal styles */
+.business-search-tone-eye .business-detail-modal {
+  background: #fdfdf6;
+  border-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-detail-modal-header {
+  background: #fdfdf6;
+  border-bottom-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-detail-modal-header h2 {
+  color: #1f2933;
+}
+
+.business-search-tone-eye .business-detail-modal-close {
+  color: #6b7280;
+}
+
+.business-search-tone-eye .business-detail-modal-close:hover {
+  color: #1f2933;
+  background-color: #f3f4e4;
+}
+
+.business-search-tone-eye .business-detail-section h3 {
+  color: #374151;
+  border-bottom-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-detail-label {
+  color: #6b7280;
+}
+
+.business-search-tone-eye .business-detail-value {
+  color: #374151;
+}
+
+.business-search-tone-eye .business-detail-badge {
+  background: #f3f4e4;
+  color: #4b5563;
+}
+
+/* Responsive modal */
+@media (max-width: 768px) {
+  .business-detail-modal {
+    max-width: 100%;
+    margin: 0.5rem;
+    max-height: 95vh;
+  }
+
+  .business-detail-modal-header {
+    padding: 1rem;
+  }
+
+  .business-detail-modal-header h2 {
+    font-size: 1.25rem;
+  }
+
+  .business-detail-modal-content {
+    padding: 1rem;
+  }
+
+  .business-detail-grid {
+    grid-template-columns: 1fr;
   }
 }
 
