@@ -25,6 +25,8 @@ const THEMES = [
   'light',
   'dark',
   'eye',
+  'cyan-blue',
+  'violet-gold',
 ] as const;
 
 const VARIANTS = [
@@ -335,11 +337,18 @@ function AusdataUIContent({
                   value={currentTheme}
                   onChange={(e) => setCurrentTheme(e.target.value as Theme)}
                 >
-                  {THEMES.map((theme) => (
-                    <option key={theme} value={theme}>
-                      {theme.charAt(0).toUpperCase() + theme.slice(1)}
-                    </option>
-                  ))}
+                  {THEMES.map((theme) => {
+                    const labels: Record<string, string> = {
+                      'cyan-blue': 'Cyan Blue',
+                      'violet-gold': 'Violet Gold',
+                    };
+                    const label = labels[theme] || theme.charAt(0).toUpperCase() + theme.slice(1);
+                    return (
+                      <option key={theme} value={theme}>
+                        {label}
+                      </option>
+                    );
+                  })}
                 </select>
               </label>
 

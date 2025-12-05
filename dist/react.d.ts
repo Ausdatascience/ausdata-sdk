@@ -15,7 +15,7 @@ import './server.js';
  * }
  * ```
  */
-declare const THEMES: readonly ["minimal", "brand", "light", "dark", "eye"];
+declare const THEMES: readonly ["minimal", "brand", "light", "dark", "eye", "cyan-blue", "violet-gold"];
 declare const VARIANTS: readonly [{
     readonly value: "table";
     readonly label: "Table";

@@ -609,6 +609,286 @@
   border-color: #d4d7b0;
 }
 
+/* 视觉主题：cyan-blue（深青、深蓝渐变） */
+.business-search-tone-cyan-blue .business-search-panel {
+  background: linear-gradient(135deg, #0a4d68 0%, #0e7490 50%, #155e75 100%);
+  border-color: #06b6d4;
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-search-title {
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-search-subtitle {
+  color: #bae6fd;
+}
+
+.business-search-tone-cyan-blue .business-search-input {
+  background: rgba(8, 47, 73, 0.8);
+  border-color: #06b6d4;
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-search-input::placeholder {
+  color: #7dd3fc;
+}
+
+.business-search-tone-cyan-blue .business-search-button {
+  background: #0891b2;
+  border-color: #06b6d4;
+  color: #ffffff;
+}
+
+.business-search-tone-cyan-blue .business-search-button:hover:not(:disabled) {
+  background: #0e7490;
+  border-color: #0891b2;
+}
+
+.business-search-tone-cyan-blue .business-table-wrapper {
+  background: linear-gradient(135deg, #083344 0%, #0c4a6e 50%, #075985 100%);
+  border-color: #06b6d4;
+}
+
+.business-search-tone-cyan-blue .business-table thead {
+  background: rgba(8, 51, 68, 0.95);
+}
+
+.business-search-tone-cyan-blue .business-table th {
+  background: rgba(8, 51, 68, 0.95);
+  color: #7dd3fc;
+}
+
+.business-search-tone-cyan-blue .business-table th,
+.business-search-tone-cyan-blue .business-table td {
+  color: #e0f2fe;
+  border-bottom-color: rgba(6, 182, 212, 0.3);
+}
+
+.business-search-tone-cyan-blue .business-style-controls select,
+.business-search-tone-cyan-blue .business-pagination-controls select {
+  background-color: rgba(8, 47, 73, 0.8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dd3fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #06b6d4;
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-style-controls select:hover {
+  background-color: rgba(14, 116, 144, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dd3fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #0891b2;
+}
+
+.business-search-tone-cyan-blue .business-style-controls select:focus {
+  background-color: rgba(14, 116, 144, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dd3fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #06b6d4;
+}
+
+.business-search-tone-cyan-blue .business-pagination-controls select:hover {
+  background-color: rgba(14, 116, 144, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dd3fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #0891b2;
+}
+
+.business-search-tone-cyan-blue .business-pagination-controls select:focus {
+  background-color: rgba(14, 116, 144, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%237dd3fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #06b6d4;
+}
+
+.business-search-tone-cyan-blue .business-pagination-buttons button {
+  border-color: #06b6d4;
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-pagination-buttons button:hover:not(:disabled) {
+  background: rgba(14, 116, 144, 0.9);
+  border-color: #0891b2;
+}
+
+.business-search-tone-cyan-blue .business-card {
+  background: rgba(8, 51, 68, 0.95);
+  border-color: #06b6d4;
+}
+
+.business-search-tone-cyan-blue .business-card-name {
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-card-abn,
+.business-search-tone-cyan-blue .business-card-meta,
+.business-search-tone-cyan-blue .business-card-score {
+  color: #bae6fd;
+}
+
+.business-search-tone-cyan-blue .business-card-address {
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-list-item {
+  background: rgba(8, 51, 68, 0.95);
+  border-color: #06b6d4;
+}
+
+.business-search-tone-cyan-blue .business-list-name {
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-list-item:hover {
+  background: rgba(14, 116, 144, 0.98);
+  border-color: #0891b2;
+}
+
+.business-search-tone-cyan-blue .business-table tbody tr:hover {
+  background: rgba(14, 116, 144, 0.9);
+}
+
+.business-search-tone-cyan-blue .business-card:hover {
+  background: rgba(14, 116, 144, 0.98);
+  border-color: #0891b2;
+}
+
+/* 视觉主题：violet-gold（紫罗兰、暗金渐变） */
+.business-search-tone-violet-gold .business-search-panel {
+  background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #3b1f5e 100%);
+  border-color: #a855f7;
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-search-title {
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-search-subtitle {
+  color: #e9d5ff;
+}
+
+.business-search-tone-violet-gold .business-search-input {
+  background: rgba(88, 28, 135, 0.8);
+  border-color: #a855f7;
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-search-input::placeholder {
+  color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-search-button {
+  background: linear-gradient(135deg, #a855f7 0%, #5b21b6 100%);
+  border-color: #c084fc;
+  color: #ffffff;
+}
+
+.business-search-tone-violet-gold .business-search-button:hover:not(:disabled) {
+  background: linear-gradient(135deg, #9333ea 0%, #4c1d95 100%);
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-table-wrapper {
+  background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #3b1f5e 100%);
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-table thead {
+  background: rgba(88, 28, 135, 0.95);
+}
+
+.business-search-tone-violet-gold .business-table th {
+  background: rgba(88, 28, 135, 0.95);
+  color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-table th,
+.business-search-tone-violet-gold .business-table td {
+  color: #faf5ff;
+  border-bottom-color: rgba(168, 85, 247, 0.3);
+}
+
+.business-search-tone-violet-gold .business-style-controls select,
+.business-search-tone-violet-gold .business-pagination-controls select {
+  background-color: rgba(88, 28, 135, 0.8);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c084fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #a855f7;
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-style-controls select:hover {
+  background-color: rgba(124, 58, 237, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c084fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-style-controls select:focus {
+  background-color: rgba(124, 58, 237, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c084fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-pagination-controls select:hover {
+  background-color: rgba(124, 58, 237, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c084fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-pagination-controls select:focus {
+  background-color: rgba(124, 58, 237, 0.9);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23c084fc' d='M6 9L1 4h10z'/%3E%3C/svg%3E");
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-pagination-buttons button {
+  border-color: #a855f7;
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-pagination-buttons button:hover:not(:disabled) {
+  background: rgba(124, 58, 237, 0.9);
+  border-color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-card {
+  background: rgba(88, 28, 135, 0.95);
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-card-name {
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-card-abn,
+.business-search-tone-violet-gold .business-card-meta,
+.business-search-tone-violet-gold .business-card-score {
+  color: #e9d5ff;
+}
+
+.business-search-tone-violet-gold .business-card-address {
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-list-item {
+  background: rgba(88, 28, 135, 0.95);
+  border-color: #a855f7;
+}
+
+.business-search-tone-violet-gold .business-list-name {
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-list-item:hover {
+  background: rgba(124, 58, 237, 0.98);
+  border-color: #c084fc;
+}
+
+.business-search-tone-violet-gold .business-table tbody tr:hover {
+  background: rgba(124, 58, 237, 0.9);
+}
+
+.business-search-tone-violet-gold .business-card:hover {
+  background: rgba(124, 58, 237, 0.98);
+  border-color: #c084fc;
+}
+
 .business-search-button:disabled {
   opacity: 0.7;
   cursor: default;
@@ -761,6 +1041,22 @@
 
 .business-pagination-page strong {
   color: #e5e7eb;
+}
+
+.business-search-tone-cyan-blue .business-pagination-page {
+  color: #bae6fd;
+}
+
+.business-search-tone-cyan-blue .business-pagination-page strong {
+  color: #e0f2fe;
+}
+
+.business-search-tone-violet-gold .business-pagination-page {
+  color: #e9d5ff;
+}
+
+.business-search-tone-violet-gold .business-pagination-page strong {
+  color: #faf5ff;
 }
 
 .business-pagination-buttons {
@@ -1377,5 +1673,41 @@
   .business-detail-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* 整个页面背景 - 应用到 body */
+body[data-ausdata-theme='minimal'] {
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='brand'] {
+  background: radial-gradient(circle at top left, #020617 0, #020617 45%, #000 100%);
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='light'] {
+  background: #f9fafb;
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='dark'] {
+  background: #000000;
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='eye'] {
+  background: #f3f4e4;
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='cyan-blue'] {
+  background: linear-gradient(135deg, #083344 0%, #0c4a6e 50%, #075985 100%);
+  min-height: 100vh;
+}
+
+body[data-ausdata-theme='violet-gold'] {
+  background: linear-gradient(135deg, #4c1d95 0%, #6d28d9 50%, #3b1f5e 100%);
+  min-height: 100vh;
 }
 
