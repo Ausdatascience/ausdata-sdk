@@ -15,6 +15,7 @@ Official TypeScript SDK for interacting with the AusData platform. Ship email co
 - **Forms API client** – `Ausdata.forms.submit` authenticates with your AusData API key and calls `/api/v1/forms/submit`.
 - **Email API client** – `Ausdata.email.send` triggers server-side delivery through `/api/v1/emails/send`.
 - **Business search client** – `Ausdata.business.search` queries `/api/v1/business/search` to look up Australian business data by **name** or **11‑digit ABN**.
+- **React UI Component** – Ready-to-use business search interface with accordion layout, multiple themes, and responsive design.
 
 ## Installation
 
@@ -44,7 +45,13 @@ export default function BusinessPage() {
 }
 ```
 
-That's it! See [README-REACT.md](./README-REACT.md) for more details.
+**Features:**
+- **Accordion Interface** – Search form and display settings are organized in collapsible accordion panels for a cleaner, more organized interface
+- **Multiple Themes** – Choose from 7 built-in themes: minimal, brand, light, dark, eye, cyan-blue, and violet-gold
+- **Layout Variants** – Display results as table, card, or list views
+- **Business Search** – Search by business name or 11-digit ABN with real-time results
+- **Responsive Design** – Fully responsive and mobile-friendly
+- **Accessibility** – Built with ARIA attributes and keyboard navigation support
 
 ### SDK Usage
 

@@ -1,6 +1,6 @@
 {
   "name": "@ausdata/sdk",
-  "version": "0.4.0",
+  "version": "0.5.0",
   "description": "Official AusData SDK for forms, emails and business search",
   "type": "module",
   "main": "./dist/index.cjs",

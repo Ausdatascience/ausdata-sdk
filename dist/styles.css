@@ -48,14 +48,87 @@
 .business-search-panel {
   background: transparent;
   border-radius: 0.85rem;
-  padding: 1.5rem 1.75rem;
+  padding: 0;
   border: 1px solid rgba(55, 65, 81, 0.4);
   backdrop-filter: none;
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0;
   margin: 0 auto 1rem; /* Center panel and add bottom margin */
   max-width: 720px;
+  overflow: hidden;
+}
+
+/* Accordion Styles */
+.business-accordion-item {
+  border-bottom: 1px solid rgba(55, 65, 81, 0.4);
+}
+
+.business-accordion-item:last-child {
+  border-bottom: none;
+}
+
+.business-accordion-header {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.25rem 1.75rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  transition: background-color 0.2s ease;
+  gap: 1rem;
+}
+
+.business-accordion-header:hover {
+  background: rgba(55, 65, 81, 0.2);
+}
+
+.business-accordion-header:focus {
+  outline: 2px solid rgba(79, 70, 229, 0.6);
+  outline-offset: -2px;
+  border-radius: 0;
+}
+
+.business-accordion-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #e5e7eb;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  flex: 1;
+}
+
+.business-accordion-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  transition: transform 0.3s ease, color 0.2s ease;
+  flex-shrink: 0;
+}
+
+.business-accordion-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.business-accordion-icon svg {
+  width: 16px;
+  height: 16px;
+}
+
+.business-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  padding: 0 1.75rem;
+}
+
+.business-accordion-content.expanded {
+  max-height: 500px;
+  padding: 0 1.75rem 1.5rem 1.75rem;
 }
 
 .business-style-controls {
@@ -64,8 +137,7 @@
   align-items: center;
   font-size: 0.8rem;
   justify-content: center; /* Center controls within their container */
-  border-top: 1px solid rgba(55, 65, 81, 0.6); /* Add a separator line */
-  padding-top: 1.25rem;
+  padding-top: 1rem;
   width: 100%; /* Ensure it takes full width of the panel */
 }
 
@@ -110,6 +182,7 @@
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  padding-top: 1rem;
 }
 
 .business-search-label {
@@ -203,6 +276,14 @@
   border-color: rgba(55, 65, 81, 0.9);
 }
 
+.business-search-tone-minimal .business-accordion-item {
+  border-bottom-color: rgba(55, 65, 81, 0.6);
+}
+
+.business-search-tone-minimal .business-accordion-header:hover {
+  background: rgba(55, 65, 81, 0.3);
+}
+
 .business-search-tone-minimal .business-search-button {
   background: #111827;
   border-color: #4b5563;
@@ -253,6 +334,18 @@
   border-color: rgba(79, 70, 229, 0.8);
 }
 
+.business-search-tone-brand .business-accordion-item {
+  border-bottom-color: rgba(79, 70, 229, 0.4);
+}
+
+.business-search-tone-brand .business-accordion-header:hover {
+  background: rgba(79, 70, 229, 0.15);
+}
+
+.business-search-tone-brand .business-accordion-header:focus {
+  outline-color: rgba(79, 70, 229, 0.8);
+}
+
 .business-search-tone-brand .business-search-button {
   background: #4f46e5;
   border-color: #4f46e5;
@@ -297,6 +390,22 @@
   background: #ffffff;
   border-color: #e5e7eb;
   color: #111827;
+}
+
+.business-search-tone-light .business-accordion-item {
+  border-bottom-color: #e5e7eb;
+}
+
+.business-search-tone-light .business-accordion-header:hover {
+  background: #f9fafb;
+}
+
+.business-search-tone-light .business-accordion-title {
+  color: #111827;
+}
+
+.business-search-tone-light .business-accordion-icon {
+  color: #6b7280;
 }
 
 .business-search-tone-light .business-search-title {
@@ -432,6 +541,14 @@
   border-color: #111827;
 }
 
+.business-search-tone-dark .business-accordion-item {
+  border-bottom-color: rgba(31, 41, 55, 0.8);
+}
+
+.business-search-tone-dark .business-accordion-header:hover {
+  background: rgba(31, 41, 55, 0.5);
+}
+
 .business-search-tone-dark .business-table-wrapper {
   background: #020617;
   border-color: #111827;
@@ -483,6 +600,22 @@
   background: #f3f4e4;
   border-color: #e5e7c8;
   color: #374151;
+}
+
+.business-search-tone-eye .business-accordion-item {
+  border-bottom-color: #e5e7c8;
+}
+
+.business-search-tone-eye .business-accordion-header:hover {
+  background: rgba(229, 231, 200, 0.5);
+}
+
+.business-search-tone-eye .business-accordion-title {
+  color: #374151;
+}
+
+.business-search-tone-eye .business-accordion-icon {
+  color: #6b7280;
 }
 
 .business-search-tone-eye .business-search-title {
@@ -614,6 +747,26 @@
   background: linear-gradient(135deg, #0a4d68 0%, #0e7490 50%, #155e75 100%);
   border-color: #06b6d4;
   color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-accordion-item {
+  border-bottom-color: rgba(6, 182, 212, 0.4);
+}
+
+.business-search-tone-cyan-blue .business-accordion-header:hover {
+  background: rgba(6, 182, 212, 0.15);
+}
+
+.business-search-tone-cyan-blue .business-accordion-title {
+  color: #e0f2fe;
+}
+
+.business-search-tone-cyan-blue .business-accordion-icon {
+  color: #bae6fd;
+}
+
+.business-search-tone-cyan-blue .business-accordion-header:focus {
+  outline-color: rgba(6, 182, 212, 0.8);
 }
 
 .business-search-tone-cyan-blue .business-search-title {
@@ -754,6 +907,26 @@
   background: linear-gradient(135deg, #581c87 0%, #7c3aed 50%, #3b1f5e 100%);
   border-color: #a855f7;
   color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-accordion-item {
+  border-bottom-color: rgba(168, 85, 247, 0.4);
+}
+
+.business-search-tone-violet-gold .business-accordion-header:hover {
+  background: rgba(168, 85, 247, 0.15);
+}
+
+.business-search-tone-violet-gold .business-accordion-title {
+  color: #faf5ff;
+}
+
+.business-search-tone-violet-gold .business-accordion-icon {
+  color: #e9d5ff;
+}
+
+.business-search-tone-violet-gold .business-accordion-header:focus {
+  outline-color: rgba(168, 85, 247, 0.8);
 }
 
 .business-search-tone-violet-gold .business-search-title {
@@ -1357,8 +1530,32 @@
     align-items: stretch;
   }
 
+  .business-search-panel {
+    max-width: 100%;
+  }
+
+  .business-accordion-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .business-accordion-content {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+  }
+
+  .business-accordion-content.expanded {
+    padding-left: 1.25rem;
+    padding-right: 1.25rem;
+    padding-bottom: 1.25rem;
+  }
+
+  .business-accordion-title {
+    font-size: 0.85rem;
+  }
+
   .business-search-form {
     padding: 0;
+    padding-top: 0.75rem;
   }
 
   .business-search-input-row {
@@ -1369,6 +1566,19 @@
   .business-search-button {
     justify-content: center;
     width: 100%;
+  }
+
+  .business-style-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+    padding-top: 0.75rem;
+  }
+
+  .business-style-controls label {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
   }
 
   .business-search-results {

@@ -82,6 +82,10 @@ function AusdataUIContent({
   const [variant, setVariant] = useState<Variant>(defaultVariant);
   const [selectedBusiness, setSelectedBusiness] = useState<BusinessEntity | null>(null);
   const [showDetailModal, setShowDetailModal] = useState(false);
+  const [accordionExpanded, setAccordionExpanded] = useState({
+    search: true,
+    controls: false,
+  });
 
   // Get API key from prop or environment
   const apiKey = useMemo(() => {
@@ -303,69 +307,113 @@ function AusdataUIContent({
 
         {/* Main Search Panel */}
         <div className="business-search-panel">
-          {/* Search Form */}
-          <form onSubmit={handleSearch} className="business-search-form">
-            <label className="business-search-label">
-              <span>Search business</span>
-              <div className="business-search-input-row">
-                <div className="business-search-input-wrapper">
-                  <span className="business-search-input-icon">🔍</span>
-                  <input
-                    type="text"
-                    className="business-search-input"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                    placeholder='Try "Commonwealth Bank", "Woolworths", or an 11‑digit ABN'
-                  />
-                </div>
+          {/* Accordion: Search Form */}
+          <div className="business-accordion-item">
+            <button
+              type="button"
+              className="business-accordion-header"
+              onClick={() => setAccordionExpanded(prev => ({ ...prev, search: !prev.search }))}
+              aria-expanded={accordionExpanded.search}
+              aria-controls="business-accordion-search"
+            >
+              <span className="business-accordion-title">Search Business</span>
+              <span className={`business-accordion-icon ${accordionExpanded.search ? 'expanded' : ''}`}>
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </span>
+            </button>
+            <div
+              id="business-accordion-search"
+              className={`business-accordion-content ${accordionExpanded.search ? 'expanded' : ''}`}
+              aria-hidden={!accordionExpanded.search}
+            >
+              <form onSubmit={handleSearch} className="business-search-form">
+                <label className="business-search-label">
+                  <span>Search business</span>
+                  <div className="business-search-input-row">
+                    <div className="business-search-input-wrapper">
+                      <span className="business-search-input-icon">🔍</span>
+                      <input
+                        type="text"
+                        className="business-search-input"
+                        value={query}
+                        onChange={(e) => setQuery(e.target.value)}
+                        placeholder='Try "Commonwealth Bank", "Woolworths", or an 11‑digit ABN'
+                      />
+                    </div>
 
-                <button type="submit" className="business-search-button" disabled={loading}>
-                  {loading && <span className="business-search-button-dot" />}
-                  <span>{loading ? 'Searching…' : 'Search'}</span>
-                </button>
-              </div>
-            </label>
-          </form>
+                    <button type="submit" className="business-search-button" disabled={loading}>
+                      {loading && <span className="business-search-button-dot" />}
+                      <span>{loading ? 'Searching…' : 'Search'}</span>
+                    </button>
+                  </div>
+                </label>
+              </form>
+            </div>
+          </div>
 
-          {/* Style Controls */}
+          {/* Accordion: Style Controls */}
           {showControlPanel && (
-            <div className="business-style-controls">
-              <label htmlFor="ausdata-theme-select">
-                <span>Theme</span>
-                <select
-                  id="ausdata-theme-select"
-                  value={currentTheme}
-                  onChange={(e) => setCurrentTheme(e.target.value as Theme)}
-                >
-                  {THEMES.map((theme) => {
-                    const labels: Record<string, string> = {
-                      'cyan-blue': 'Cyan Blue',
-                      'violet-gold': 'Violet Gold',
-                    };
-                    const label = labels[theme] || theme.charAt(0).toUpperCase() + theme.slice(1);
-                    return (
-                      <option key={theme} value={theme}>
-                        {label}
-                      </option>
-                    );
-                  })}
-                </select>
-              </label>
+            <div className="business-accordion-item">
+              <button
+                type="button"
+                className="business-accordion-header"
+                onClick={() => setAccordionExpanded(prev => ({ ...prev, controls: !prev.controls }))}
+                aria-expanded={accordionExpanded.controls}
+                aria-controls="business-accordion-controls"
+              >
+                <span className="business-accordion-title">Display Settings</span>
+                <span className={`business-accordion-icon ${accordionExpanded.controls ? 'expanded' : ''}`}>
+                  <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M4 6L8 10L12 6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  </svg>
+                </span>
+              </button>
+              <div
+                id="business-accordion-controls"
+                className={`business-accordion-content ${accordionExpanded.controls ? 'expanded' : ''}`}
+                aria-hidden={!accordionExpanded.controls}
+              >
+                <div className="business-style-controls">
+                  <label htmlFor="ausdata-theme-select">
+                    <span>Theme</span>
+                    <select
+                      id="ausdata-theme-select"
+                      value={currentTheme}
+                      onChange={(e) => setCurrentTheme(e.target.value as Theme)}
+                    >
+                      {THEMES.map((theme) => {
+                        const labels: Record<string, string> = {
+                          'cyan-blue': 'Cyan Blue',
+                          'violet-gold': 'Violet Gold',
+                        };
+                        const label = labels[theme] || theme.charAt(0).toUpperCase() + theme.slice(1);
+                        return (
+                          <option key={theme} value={theme}>
+                            {label}
+                          </option>
+                        );
+                      })}
+                    </select>
+                  </label>
 
-              <label htmlFor="ausdata-variant-select">
-                <span>Layout</span>
-                <select
-                  id="ausdata-variant-select"
-                  value={variant}
-                  onChange={(e) => setVariant(e.target.value as Variant)}
-                >
-                  {VARIANTS.map((v) => (
-                    <option key={v.value} value={v.value}>
-                      {v.label}
-                    </option>
-                  ))}
-                </select>
-              </label>
+                  <label htmlFor="ausdata-variant-select">
+                    <span>Layout</span>
+                    <select
+                      id="ausdata-variant-select"
+                      value={variant}
+                      onChange={(e) => setVariant(e.target.value as Variant)}
+                    >
+                      {VARIANTS.map((v) => (
+                        <option key={v.value} value={v.value}>
+                          {v.label}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                </div>
+              </div>
             </div>
           )}
         </div>
